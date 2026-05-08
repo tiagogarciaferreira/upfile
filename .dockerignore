@@ -1,6 +1,7 @@
 .aiassistant
 .gradle
 .idea
+analyze
 build
 certs
 cosign

@@ -115,6 +115,27 @@ sign-and-verify-image:
 	@$(MAKE) image-signature verify-signature
 	@echo "✅ Image signed and verified successfully!"
 
+image-analyze:
+	@echo "🔍 Analyzing image: $(FULL_IMAGE)"
+	$(eval DIGEST := $(shell docker inspect $(FULL_IMAGE) --format='{{index .RepoDigests 0}}'))
+	@docker run --rm --quiet \
+				-v /var/run/docker.sock:/var/run/docker.sock \
+				-v "$(CURDIR)/analyze:/ci" \
+				wagoodman/dive:latest \
+				--ci \
+				--ci-config /ci/.dive.yaml \
+				$(DIGEST)
+	@echo "✅ Analysis complete"
+
+image-info:
+	@printf "\n"
+	@echo "📊 Image Information..."
+	@docker images --filter reference=$(IMAGE_NAME) --format "table {{.Repository}}:{{.Tag}}\t{{.Size}}\t{{.CreatedAt}}" 2>/dev/null || echo "  ⚠️ No images found"
+	@echo "  📦       Name: $(IMAGE_NAME)"
+	@echo "  🏷️        Tag: $(TAG) - $(VERSION)"
+	@SIGN_STATUS=$$(docker trust inspect --pretty $(IMAGE_NAME):$(TAG) 2>&1 | grep -qi "no signatures" && echo "❌ Not signed" || echo "✅ Signed (Docker Trust)"); \
+	echo  "  🔐  Signature: $$SIGN_STATUS"
+
 compose-clean:
 	@printf "\n"
 	@echo "🧹 Cleaning containers and volumes..."
@@ -126,7 +147,7 @@ compose-clean:
 compose-up:
 	@printf "\n"
 	@echo "🚀 Starting containers..."
-	@docker compose -p "upfile" -f docker-compose.yaml --env-file ./.env.local up -d
+	@docker compose -p "upfile" -f docker-compose.yaml --profile local --env-file ./.env.local up -d
 	@echo "✅ Containers are up!"
 
 compose-down:
@@ -167,6 +188,8 @@ help:
 	@echo "  image-push            Push image to registry"
 	@echo "  sign-and-verify-image Sign and verify image in sequence"
 	@echo "  publish-image         Build, tag and push image to registry"
+	@echo "  image-analyze         Analyze image layers and efficiency (dive)"
+	@echo "  image-info            Show local image metadata and signature status"
 	@echo ""
 
 	@echo "📦 Docker Compose Environment"
@@ -209,4 +232,6 @@ help:
 	add-host \
 	setup-local \
 	clean-local \
+	image-analyze \
+	image-info
 	help
