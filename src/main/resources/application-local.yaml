@@ -1,0 +1,100 @@
+spring:
+  application:
+    name: upfile
+
+  threads:
+    virtual:
+      enabled: true
+
+  main:
+    keep-alive: true
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      pool-name: upfile-pool
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      auto-commit: false
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      leak-detection-threshold: 60000
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          fetch_size: 50
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+      format_sql: true
+      show_sql: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: ${SPRING_SQL_INIT_DATA_LOCATIONS}
+
+  flyway:
+    enabled: true
+    locations: ${SPRING_FLYWAY_LOCATIONS}
+
+  mvc:
+    apiversion:
+      default: 1.0
+      detect-supported: true
+      use:
+        header: API-Version
+      supported:
+        - ${API_VERSION}
+    problemdetails:
+      enabled: true
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+    datatype:
+      datetime:
+        write-date-keys-as-timestamps: false
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+server:
+  port: ${SERVER_PORT:8080}
+  ssl:
+    enabled: true
+    key-store: ${SSL_KEY_STORE}
+    key-store-password: ${SSL_STORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: ${SSL_KEY_ALIAS}
+    protocol: TLS
+
+logging:
+  file:
+    path: ${LOG_PATH:./logs}
+  config: ${LOG_CONFIG_PATH:classpath:logback-spring.xml}
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+
+security:
+  jwt:
+    issuer: https://${HOSTNAME}
+    audience: https://${HOSTNAME}
+    expiration-seconds: 600
+    public-key: ${JWT_PUBLIC_KEY}
+    private-key: ${JWT_PRIVATE_KEY}

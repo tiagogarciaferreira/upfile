@@ -5,17 +5,25 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+certs/*
+!certs/
+!certs/generate-certificate.sh
+
+src/main/resources/**.p12
+src/main/resources/**.jwk
+src/main/resources/**.pem
+.env
+.env.local
+
+cosign/*
+!cosign/
+!cosign/generate-signature-key.sh
+
+jwt/*
+!jwt/
+!jwt/generate-jwt-keys.sh
+
+logs/
 
 ### IntelliJ IDEA ###
 .idea
@@ -25,13 +33,3 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
