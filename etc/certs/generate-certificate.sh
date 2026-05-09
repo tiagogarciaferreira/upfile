@@ -47,7 +47,7 @@ echo "✅ Root CA trusted by system"
 
 printf "\n"
 echo "📦 Loading environment variables from .env..."
-source ../../.env
+source ../../.env.local
 export SSL_STORE_PASSWORD
 
 printf "\n"
