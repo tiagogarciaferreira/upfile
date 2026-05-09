@@ -11,6 +11,7 @@ k6
 logs
 monitoring
 postman
+storage
 .dockerignore
 .env
 .env.local

@@ -15,14 +15,13 @@ services:
       SSL_KEY_STORE: file:/run/secrets/upfile_tls_keystore
       JWT_PUBLIC_KEY: file:/run/secrets/jwt_public_key
       JWT_PRIVATE_KEY: file:/run/secrets/jwt_private_key
-      SPRING_SQL_INIT_DATA_LOCATIONS: file:/app/db/data/seed_tb_countries.sql,file:/app/db/data/seed_tb_users.sql
+      SPRING_SQL_INIT_DATA_LOCATIONS: file:/app/db/data/seed_tb_users.sql
       SPRING_FLYWAY_LOCATIONS: filesystem:/app/db/migration
       LOG_CONFIG_PATH: file:/app/config/logback-spring.xml
       LOG_PATH: /app/logs
     ports:
       - "127.0.0.1:${SERVER_PORT:-8443}:${SERVER_PORT:-8443}"
     volumes:
-      - ./src/main/resources/db/data/seed_tb_countries.sql:/app/db/data/seed_tb_countries.sql:ro
       - ./src/main/resources/db/data/seed_tb_users.sql:/app/db/data/seed_tb_users.sql:ro
       - ./src/main/resources/db/migration:/app/db/migration:ro
       - ./src/main/resources/logback-spring.xml:/app/config/logback-spring.xml:ro
@@ -82,9 +81,50 @@ services:
     networks:
       - upfile-net
 
+  rustfs:
+    container_name: rustfs
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
+    profiles:
+      - local
+    env_file:
+      - ./.env.local
+    ports:
+      - "127.0.0.1:${RUSTFS_PORT:-9000}:${RUSTFS_PORT:-9000}"
+      - "127.0.0.1:${RUSTFS_CONSOLE_PORT:-9001}:${RUSTFS_CONSOLE_PORT:-9001}"
+    environment:
+      RUSTFS_ADDRESS: "127.0.0.1:${RUSTFS_PORT:-9000}"
+      RUSTFS_ACCESS_KEY: "${RUSTFS_ADMIN_ROOT_ACCESS_KEY}"
+      RUSTFS_SECRET_KEY: "${RUSTFS_ADMIN_ROOT_SECRET_KEY}"
+    volumes:
+      - rustfs_data:/data
+    command:
+      - /data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${RUSTFS_PORT:-9000}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: 128M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - upfile-net
+
 volumes:
   postgres_data:
     name: postgres_data
+    driver: local
+  rustfs_data:
+    name: rustfs_data
     driver: local
 
 networks:

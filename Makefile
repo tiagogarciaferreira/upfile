@@ -139,9 +139,9 @@ image-info:
 compose-clean:
 	@printf "\n"
 	@echo "🧹 Cleaning containers and volumes..."
-	@docker stop app postgres minio 2>/dev/null || true
-	@docker rm -f app postgres minio 2>/dev/null || true
-	@docker volume rm postgres_data minio_data 2>/dev/null || true
+	@docker stop app postgres rustfs 2>/dev/null || true
+	@docker rm -f app postgres rustfs 2>/dev/null || true
+	@docker volume rm postgres_data rustfs_data 2>/dev/null || true
 	@echo "✨ Cleanup completed successfully!"
 
 compose-up:
