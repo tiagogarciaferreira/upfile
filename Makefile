@@ -19,38 +19,38 @@ add-host:
 generate-cert:
 	@printf "\n"
 	@echo "🔐 Generating certificate..."
-	@cd certs && chmod +x ./generate-certificate.sh && ./generate-certificate.sh
+	@cd etc/certs && chmod +x ./generate-certificate.sh && ./generate-certificate.sh
 	@echo "✅ Certificate generated successfully!"
 
 clean-cert:
 	@printf "\n"
 	@echo "🧹 Cleaning certificate files..."
-	@rm -vf certs/*.csr certs/*.key certs/*.crt certs/*.p12 certs/*.srl certs/*.pem src/main/resources/*.p12 2>/dev/null || true
+	@rm -vf etc/certs/*.csr etc/certs/*.key etc/certs/*.crt etc/certs/*.p12 etc/certs/*.srl etc/certs/*.pem src/main/resources/*.p12 2>/dev/null || true
 	@sudo rm -vf /usr/local/share/ca-certificates/dev-root-ca.crt && update-ca-certificates --fresh 2>/dev/null || true
 	@echo "✅ Cleanup completed!"
 
 generate-cosign-key:
 	@printf "\n"
 	@echo "🔐 Generating Cosign key pair..."
-	@cd cosign && chmod +x ./generate-signature-key.sh && ./generate-signature-key.sh
+	@cd etc/cosign && chmod +x ./generate-signature-key.sh && ./generate-signature-key.sh
 	@echo "✅ Cosign key pair ready!"
 
 clear-cosign-key:
 	@printf "\n"
 	@echo "🧹 Cleaning Cosign key files..."
-	@rm -vf cosign/*.key cosign/*.pub 2>/dev/null || true
+	@rm -vf etc/cosign/*.key etc/cosign/*.pub 2>/dev/null || true
 	@echo "✅ Cleanup completed!"
 
 generate-jwt-keys:
 	@printf "\n"
 	@echo "🔐 Generating Ed25519 JWT key pair..."
-	@cd jwt && chmod +x ./generate-jwt-keys.sh && ./generate-jwt-keys.sh
+	@cd etc/jwt && chmod +x ./generate-jwt-keys.sh && ./generate-jwt-keys.sh
 	@echo "✅ Ed25519 keys generated successfully!"
 
 clear-jwt-keys:
 	@printf "\n"
 	@echo "🧹 Cleaning Jwt key files..."
-	@rm -vf jwt/*.jwk src/main/resources/*.jwk 2>/dev/null || true
+	@rm -vf etc/jwt/*.jwk src/main/resources/*.jwk 2>/dev/null || true
 	@echo "✅ Cleanup completed!"
 
 setup-local:
@@ -96,14 +96,14 @@ image-signature:
 	@$(eval DIGEST=$(shell docker inspect $(FULL_IMAGE) --format='{{index .RepoDigests 0}}'))
 
 	@echo "📋 Digest: $(DIGEST)"
-	@cosign sign --key cosign/cosign.key $(DIGEST)
+	@cosign sign --key etc/cosign/cosign.key $(DIGEST)
 	@echo "✅ Image signed: $(FULL_IMAGE)"
 
 verify-signature:
 	@echo "🔍 Verifying signature..."
 	@sleep 10
 	@cosign verify \
-		--key cosign/cosign.pub \
+		--key etc/cosign/cosign.pub \
 		--output json \
 		$(DIGEST) \
 	| jq -r '.[0].critical | { docker_reference: .identity["docker-reference"], manifest_digest: .image["docker-manifest-digest"], signature_type: .type }'
@@ -120,7 +120,7 @@ image-analyze:
 	$(eval DIGEST := $(shell docker inspect $(FULL_IMAGE) --format='{{index .RepoDigests 0}}'))
 	@docker run --rm --quiet \
 				-v /var/run/docker.sock:/var/run/docker.sock \
-				-v "$(CURDIR)/analyze:/ci" \
+				-v "$(CURDIR)/etc/analyze:/ci" \
 				wagoodman/dive:latest \
 				--ci \
 				--ci-config /ci/.dive.yaml \

@@ -47,7 +47,7 @@ echo "✅ Root CA trusted by system"
 
 printf "\n"
 echo "📦 Loading environment variables from .env..."
-source ../.env
+source ../../.env
 export SSL_STORE_PASSWORD
 
 printf "\n"
@@ -66,8 +66,8 @@ echo "✅ PKCS12 keystore created: upfile-tls-keystore.p12"
 
 printf "\n"
 echo "🔄 Copying TLS keystore to resources..."
-rsync -av upfile-tls-keystore.p12 ../src/main/resources/
-echo "✅ Keystore copied to ../src/main/resources/"
+rsync -av upfile-tls-keystore.p12 ../../src/main/resources/
+echo "✅ Keystore copied to ../../src/main/resources/"
 
 
 printf "\n"

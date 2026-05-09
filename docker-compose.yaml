@@ -133,8 +133,8 @@ networks:
 
 secrets:
   upfile_tls_keystore:
-    file: ./certs/upfile-tls-keystore.p12
+    file: etc/certs/upfile-tls-keystore.p12
   jwt_public_key:
-    file: ./jwt/jwt-public-key.jwk
+    file: etc/jwt/jwt-public-key.jwk
   jwt_private_key:
-    file: ./jwt/jwt-private-key.jwk
+    file: etc/jwt/jwt-private-key.jwk

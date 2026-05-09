@@ -19,6 +19,6 @@ else
 
   printf "\n"
   echo -e "🔄 [Syncing] Copying JWT Keys to resources..."
-  rsync -av jwt-public-key.jwk ../src/main/resources/
-  rsync -av jwt-private-key.jwk ../src/main/resources/
+  rsync -av jwt-public-key.jwk ../../src/main/resources/
+  rsync -av jwt-private-key.jwk ../../src/main/resources/
 fi
