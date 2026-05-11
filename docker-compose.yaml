@@ -82,39 +82,34 @@ services:
     networks:
       - upfile-net
 
-  rustfs:
-    container_name: rustfs
-    image: rustfs/rustfs:latest
+  minio:
+    container_name: minio
+    image: quay.io/minio/aistor/minio:latest
     restart: unless-stopped
     profiles:
       - local
     env_file:
       - ./.env.local
     ports:
-      - "127.0.0.1:${RUSTFS_PORT:-9000}:${RUSTFS_PORT:-9000}"
-      - "127.0.0.1:${RUSTFS_CONSOLE_PORT:-9001}:${RUSTFS_CONSOLE_PORT:-9001}"
+      - "127.0.0.1:${STORAGE_PORT:-9000}:${STORAGE_PORT:-9000}"
+      - "127.0.0.1:${STORAGE_CONSOLE_PORT:-9001}:${STORAGE_CONSOLE_PORT:-9001}"
     environment:
-      RUSTFS_ADDRESS: "127.0.0.1:${RUSTFS_PORT:-9000}"
-      RUSTFS_ACCESS_KEY: "${RUSTFS_ADMIN_ROOT_ACCESS_KEY}"
-      RUSTFS_SECRET_KEY: "${RUSTFS_ADMIN_ROOT_SECRET_KEY}"
+      MINIO_ROOT_USER: ${STORAGE_ADMIN_USER}
+      MINIO_ROOT_PASSWORD: ${STORAGE_ADMIN_PASSWORD}
     volumes:
-      - rustfs_data:/data
-    command:
-      - /data
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${RUSTFS_PORT:-9000}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      - minio_data:/mnt/data
+      - ./etc/certs/storage_cert.pem:/etc/minio/certs/public.crt:ro
+      - ./etc/certs/storage_key.pem:/etc/minio/certs/private.key:ro
+      - ./etc/storage/minio.license:/minio.license:ro
+    command: server /mnt/data --license /minio.license --certs-dir /etc/minio/certs
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: 128M
+          cpus: "0.50"
+          memory: 256M
         reservations:
           cpus: "0.10"
-          memory: 64M
+          memory: 128M
     security_opt:
       - no-new-privileges:true
     networks:
@@ -124,8 +119,8 @@ volumes:
   postgres_data:
     name: postgres_data
     driver: local
-  rustfs_data:
-    name: rustfs_data
+  minio_data:
+    name: minio_data
     driver: local
 
 networks:

@@ -10,8 +10,7 @@
       ],
       "Resource": [
         "arn:aws:s3:::ai-knowledge-base"
-      ],
-      "Condition": {}
+      ]
     },
     {
       "Sid": "ObjectActions",
@@ -23,8 +22,7 @@
       ],
       "Resource": [
         "arn:aws:s3:::ai-knowledge-base/*"
-      ],
-      "Condition": {}
+      ]
     }
   ]
 }

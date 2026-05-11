@@ -6,6 +6,7 @@ object Versions {
     const val SPRINGDOC_OPENAPI = "3.0.2"
     const val BOUNCY_CASTLE = "1.84"
     const val GOOGLE_TINK = "1.21.0"
+    const val AWS_SDK_S3 = "2.25.27"
 }
 
 plugins {
@@ -96,6 +97,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("software.amazon.awssdk:s3:${Versions.AWS_SDK_S3}")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Versions.SPRINGDOC_OPENAPI}")
     implementation("org.bouncycastle:bcpkix-jdk18on:${Versions.BOUNCY_CASTLE}")
     implementation("com.google.crypto.tink:tink:${Versions.GOOGLE_TINK}")
