@@ -1,3 +1,6 @@
+CREATE
+EXTENSION "uuid-ossp";
+
 CREATE TABLE tb_users
 (
     id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

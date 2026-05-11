@@ -71,9 +71,15 @@ echo "✅ Keystore copied to ../../src/main/resources/"
 
 
 printf "\n"
+echo "🛡️ Exporting TLS certificates to PEM format..."
+openssl x509 -in server.crt -out storage_cert.pem -outform PEM
+openssl rsa -in server.key -out storage_key.pem -outform PEM
+echo "✅ Success: storage_cert.pem and storage_key.pem generated."
+
+printf "\n"
 echo "🎉 All certificate files have been generated!"
 echo "📂 Files:"
-for file in rootCA.key rootCA.crt server.key server.csr server.crt upfile-tls-keystore.p12; do
+for file in rootCA.key rootCA.crt server.key server.csr server.crt upfile-tls-keystore.p12 storage_cert.pem storage_key.pem; do
   [ -e "$file" ] && echo "  ✔ $file" || echo "  ✘ $file (missing)"
 done
 printf "\n"
