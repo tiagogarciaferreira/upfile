@@ -23,6 +23,10 @@ etc/jwt/*
 !etc/jwt/
 !etc/jwt/generate-jwt-keys.sh
 
+etc/storage/*
+!etc/storage/
+!etc/storage/policy.json
+
 logs/
 
 ### IntelliJ IDEA ###

@@ -76,6 +76,15 @@ openssl x509 -in server.crt -out storage_cert.pem -outform PEM
 openssl rsa -in server.key -out storage_key.pem -outform PEM
 echo "✅ Success: storage_cert.pem and storage_key.pem generated."
 
+
+printf "\n"
+echo "🔐 Managing Java TrustStore (cacerts)..."
+keytool -delete -cacerts -alias dev-root-ca 2>/dev/null || true
+keytool -importcert -cacerts -alias dev-root-ca -file rootCA.crt -noprompt
+keytool -list -cacerts | grep dev-root-ca
+echo "✅ Root CA successfully installed in Java cacerts"
+
+
 printf "\n"
 echo "🎉 All certificate files have been generated!"
 echo "📂 Files:"
