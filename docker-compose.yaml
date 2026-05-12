@@ -94,8 +94,9 @@ services:
       - "127.0.0.1:${STORAGE_PORT:-9000}:${STORAGE_PORT:-9000}"
       - "127.0.0.1:${STORAGE_CONSOLE_PORT:-9001}:${STORAGE_CONSOLE_PORT:-9001}"
     environment:
-      MINIO_ROOT_USER: ${STORAGE_ADMIN_USER}
-      MINIO_ROOT_PASSWORD: ${STORAGE_ADMIN_PASSWORD}
+      MINIO_ROOT_USER: "${STORAGE_ADMIN_USER}"
+      MINIO_ROOT_PASSWORD: "${STORAGE_ADMIN_PASSWORD}"
+      MINIO_REGION_NAME: "${STORAGE_REGION_NAME}"
     volumes:
       - minio_data:/mnt/data
       - ./etc/certs/storage_cert.pem:/etc/minio/certs/public.crt:ro
