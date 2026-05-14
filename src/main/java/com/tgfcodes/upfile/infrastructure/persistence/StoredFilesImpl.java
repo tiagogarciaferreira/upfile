@@ -1,8 +1,8 @@
 package com.tgfcodes.upfile.infrastructure.persistence;
 
 import com.tgfcodes.upfile.domain.StoredFile;
-import com.tgfcodes.upfile.domain.StoredFileNotFoundException;
 import com.tgfcodes.upfile.domain.StoredFiles;
+import com.tgfcodes.upfile.domain.exceptions.StoredFileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +32,8 @@ public class StoredFilesImpl implements StoredFiles {
     }
 
     @Override
-    public Optional<StoredFile> findByHash(String hash) {
-        return storedFileRepository.findByHash(hash).map(storedFileMapper::toDomain);
+    public boolean existsByHash(String hash) {
+        return storedFileRepository.existsByHash(hash);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.tgfcodes.upfile.domain;
 
+import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;

@@ -1,6 +1,7 @@
 package com.tgfcodes.upfile.infrastructure.storage;
 
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -12,6 +13,7 @@ import software.amazon.awssdk.services.s3.S3Configuration;
 import java.net.URI;
 
 @RequiredArgsConstructor
+@NullMarked
 @Configuration
 public class StorageConfig {
 

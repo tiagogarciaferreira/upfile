@@ -9,7 +9,7 @@ public interface StoredFiles {
 
     Optional<StoredFile> findById(UUID id);
 
-    Optional<StoredFile> findByHash(String hash);
+    boolean existsByHash(String hash);
 
     void deleteById(UUID id);
 }

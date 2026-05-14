@@ -10,6 +10,7 @@ object Versions {
     const val MIN_IO = "8.6.0"
     const val MAP_STRUCT = "1.6.3"
     const val MAP_STRUCT_BINDING = "0.2.0"
+    const val LZ4_JAVA = "0.2.0"
 }
 
 plugins {
@@ -99,13 +100,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
-    //implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("software.amazon.awssdk:s3:${Versions.AWS_SDK_S3}")
     implementation("io.minio:minio:${Versions.MIN_IO}")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Versions.SPRINGDOC_OPENAPI}")
     implementation("org.bouncycastle:bcpkix-jdk18on:${Versions.BOUNCY_CASTLE}")
     implementation("com.google.crypto.tink:tink:${Versions.GOOGLE_TINK}")
     implementation("org.mapstruct:mapstruct:${Versions.MAP_STRUCT}")
+    //implementation("at.yawk.lz4:lz4-java:${Versions.LZ4_JAVA}")
+    //implementation("org.lz4:lz4-java:1.8.1")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.mapstruct:mapstruct-processor:${Versions.MAP_STRUCT}")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Versions.MAP_STRUCT_BINDING}")
