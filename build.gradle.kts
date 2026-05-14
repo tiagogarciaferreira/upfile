@@ -8,6 +8,8 @@ object Versions {
     const val GOOGLE_TINK = "1.21.0"
     const val AWS_SDK_S3 = "2.44.4"
     const val MIN_IO = "8.6.0"
+    const val MAP_STRUCT = "1.6.3"
+    const val MAP_STRUCT_BINDING = "0.2.0"
 }
 
 plugins {
@@ -103,10 +105,13 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Versions.SPRINGDOC_OPENAPI}")
     implementation("org.bouncycastle:bcpkix-jdk18on:${Versions.BOUNCY_CASTLE}")
     implementation("com.google.crypto.tink:tink:${Versions.GOOGLE_TINK}")
+    implementation("org.mapstruct:mapstruct:${Versions.MAP_STRUCT}")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${Versions.MAP_STRUCT}")
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Versions.MAP_STRUCT_BINDING}")
+    annotationProcessor("org.projectlombok:lombok")
     runtimeOnly("org.flywaydb:flyway-database-postgresql")
     runtimeOnly("org.postgresql:postgresql")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
