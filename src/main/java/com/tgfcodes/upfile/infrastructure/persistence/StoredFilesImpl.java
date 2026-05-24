@@ -1,8 +1,8 @@
 package com.tgfcodes.upfile.infrastructure.persistence;
 
-import com.tgfcodes.upfile.domain.StoredFile;
-import com.tgfcodes.upfile.domain.StoredFiles;
-import com.tgfcodes.upfile.domain.exceptions.StoredFileNotFoundException;
+import com.tgfcodes.upfile.domain.storedfile.StoredFile;
+import com.tgfcodes.upfile.domain.storedfile.StoredFileNotFoundException;
+import com.tgfcodes.upfile.domain.storedfile.StoredFiles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,6 @@
-package com.tgfcodes.upfile.domain.exceptions;
+package com.tgfcodes.upfile.domain.storedfile;
+
+import com.tgfcodes.upfile.domain.exceptions.DomainException;
 
 import java.util.UUID;
 

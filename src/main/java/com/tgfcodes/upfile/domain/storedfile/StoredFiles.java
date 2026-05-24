@@ -1,4 +1,4 @@
-package com.tgfcodes.upfile.domain;
+package com.tgfcodes.upfile.domain.storedfile;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,8 +1,10 @@
 package com.tgfcodes.upfile.infrastructure.storage;
 
-import com.tgfcodes.upfile.domain.FileHashCalculator;
-import lombok.SneakyThrows;
+import com.tgfcodes.upfile.domain.exceptions.InternalServerErrorException;
+import com.tgfcodes.upfile.domain.storedfile.FileHashCalculator;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,16 +19,27 @@ import java.util.HexFormat;
 @Component
 public final class FileHashCalculatorImpl implements FileHashCalculator {
 
-    private static final String ALGORITHM = "SHA-256";
+    private static final Logger log = LoggerFactory.getLogger(FileHashCalculatorImpl.class);
 
-    @SneakyThrows({NoSuchAlgorithmException.class, IOException.class})
+    private static final String ALGORITHM = "XXHASH3";
+
     @Override
     public String calculateHash(InputStream inputStream) {
-        var digest = MessageDigest.getInstance(ALGORITHM);
+        try {
+            var digest = MessageDigest.getInstance(ALGORITHM);
 
-        try (var digestStream = new DigestInputStream(inputStream, digest)) {
-            digestStream.transferTo(OutputStream.nullOutputStream());
+            try (var digestStream = new DigestInputStream(inputStream, digest)) {
+                digestStream.transferTo(OutputStream.nullOutputStream());
+            }
+            return HexFormat.of().formatHex(digest.digest());
+
+        } catch (NoSuchAlgorithmException ex) {
+            log.error("Security provider required for hash algorithm is missing [algorithm={}]", ALGORITHM, ex);
+            throw new InternalServerErrorException("System configured with invalid hash algorithm");
+
+        } catch (IOException ex) {
+            log.error("I/O error occurred while draining stream for hash calculation", ex);
+            throw new InternalServerErrorException("Failed to read file stream for deduplication analysis");
         }
-        return HexFormat.of().formatHex(digest.digest());
     }
 }

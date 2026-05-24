@@ -1,12 +1,10 @@
-package com.tgfcodes.upfile.domain;
+package com.tgfcodes.upfile.domain.storedfile;
 
+import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 
 import java.time.Instant;
-import java.util.Objects;
 import java.util.UUID;
-
-import static java.util.Objects.isNull;
 
 public record StoredFile(
         UUID id,
@@ -19,6 +17,8 @@ public record StoredFile(
         String contentType,
         String contentDisposition,
         Long size,
+        String mimetype,
+        String type,
         Instant createdAt
 ) {
 
@@ -32,7 +32,9 @@ public record StoredFile(
             String extension,
             String contentType,
             String contentDisposition,
-            Long size
+            Long size,
+            String mimetype,
+            String type
     ) {
         return new StoredFile(
                 id,
@@ -45,6 +47,8 @@ public record StoredFile(
                 contentType,
                 contentDisposition,
                 size,
+                mimetype,
+                type,
                 Instant.now()
         );
     }
@@ -60,6 +64,8 @@ public record StoredFile(
             String contentType,
             String contentDisposition,
             Long size,
+            String mimetype,
+            String type,
             Instant createdAt
     ) {
         return new StoredFile(
@@ -73,6 +79,8 @@ public record StoredFile(
                 contentType,
                 contentDisposition,
                 size,
+                mimetype,
+                type,
                 createdAt
         );
     }
@@ -88,18 +96,8 @@ public record StoredFile(
         Checks.requireNonEmpty(contentType, () -> new DomainValidationException("Content type cannot be empty"));
         Checks.requireNonEmpty(contentDisposition, () -> new DomainValidationException("Content disposition cannot be empty"));
         Checks.requireNonNull(size, () -> new DomainValidationException("Size cannot be null"));
+        Checks.requireNonEmpty(mimetype, () -> new DomainValidationException("Mimetype cannot be empty"));
+        Checks.requireNonEmpty(type, () -> new DomainValidationException("Type cannot be empty"));
         Checks.requireNonNull(createdAt, () -> new DomainValidationException("Created at cannot be null"));
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (isNull(object) || getClass() != object.getClass()) return false;
-        StoredFile storedFile = (StoredFile) object;
-        return Objects.equals(id, storedFile.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

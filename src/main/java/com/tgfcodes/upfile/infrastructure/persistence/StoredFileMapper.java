@@ -1,6 +1,6 @@
 package com.tgfcodes.upfile.infrastructure.persistence;
 
-import com.tgfcodes.upfile.domain.StoredFile;
+import com.tgfcodes.upfile.domain.storedfile.StoredFile;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

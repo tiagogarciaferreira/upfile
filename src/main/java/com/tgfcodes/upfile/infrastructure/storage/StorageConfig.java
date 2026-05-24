@@ -1,6 +1,7 @@
 package com.tgfcodes.upfile.infrastructure.storage;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.Tika;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +35,10 @@ public class StorageConfig {
                         .build()
                 )
                 .build();
+    }
+
+    @Bean
+    public Tika tika() {
+        return new Tika();
     }
 }
