@@ -1,20 +1,16 @@
 package com.tgfcodes.upfile.presentation;
 
-import com.tgfcodes.upfile.application.UploadFileCommand;
-import com.tgfcodes.upfile.application.UploadFileOutput;
-import com.tgfcodes.upfile.application.UploadFileUseCase;
+import com.tgfcodes.upfile.application.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -27,6 +23,8 @@ public class UploadFileController {
     private static final Logger log = LoggerFactory.getLogger(UploadFileController.class);
 
     private final UploadFileUseCase uploadFileUseCase;
+
+    private final GetFileDetailsUseCase fileDetailsUseCase;
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadFileResponse> upload(@RequestParam(value = "file") MultipartFile file) {
@@ -53,5 +51,15 @@ public class UploadFileController {
 
         log.info("File uploaded successfully");
         return ResponseEntity.created(location).body(uploadFileResponse);
+    }
+
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FileDetailsResponse> getFileDetails(@PathVariable UUID id) {
+
+        FileDetailsOutput fileDetailsOutput = fileDetailsUseCase.execute(id);
+        FileDetailsResponse fileDetailsResponse = FileDetailsResponse.from(fileDetailsOutput);
+
+        log.info("File details retrieved successfully");
+        return ResponseEntity.ok(fileDetailsResponse);
     }
 }
