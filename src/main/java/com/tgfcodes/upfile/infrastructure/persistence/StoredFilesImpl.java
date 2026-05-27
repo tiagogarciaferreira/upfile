@@ -1,7 +1,6 @@
 package com.tgfcodes.upfile.infrastructure.persistence;
 
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;
-import com.tgfcodes.upfile.domain.storedfile.StoredFileNotFoundException;
 import com.tgfcodes.upfile.domain.storedfile.StoredFiles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -38,8 +37,6 @@ public class StoredFilesImpl implements StoredFiles {
 
     @Override
     public void deleteById(UUID id) {
-        boolean exists = storedFileRepository.existsById(id);
-        if (!exists) throw new StoredFileNotFoundException(id);
         storedFileRepository.deleteById(id);
     }
 }

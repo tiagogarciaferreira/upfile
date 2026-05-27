@@ -26,6 +26,8 @@ public class UploadFileController {
 
     private final GetFileDetailsUseCase fileDetailsUseCase;
 
+    private final DeleteFileUseCase deleteFileUseCase;
+
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadFileResponse> upload(@RequestParam(value = "file") MultipartFile file) {
 
@@ -61,5 +63,12 @@ public class UploadFileController {
 
         log.info("File details retrieved successfully");
         return ResponseEntity.ok(fileDetailsResponse);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        deleteFileUseCase.execute(id);
+        log.info("File deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 }
