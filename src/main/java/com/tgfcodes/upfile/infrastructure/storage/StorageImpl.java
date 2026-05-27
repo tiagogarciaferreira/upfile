@@ -31,7 +31,7 @@ public class StorageImpl implements Storage {
 
     private static final Logger log = LoggerFactory.getLogger(StorageImpl.class);
 
-    private static final int TIKA_MARK_LIMIT_BYTES = 8192; // 8KB é suficiente para os magic bytes
+    private static final int TIKA_MARK_LIMIT_BYTES = 8192;
 
     private final S3Client s3Client;
 
@@ -91,8 +91,9 @@ public class StorageImpl implements Storage {
         try {
             RequestBody requestBody = RequestBody.fromInputStream(safeStream, uploadInput.size());
             PutObjectResponse putObjectResponse = s3Client.putObject(putObjectRequest, requestBody);
+
             log.info("File successfully uploaded to S3");
-            return uploadResultMapper.toUploadResult(putObjectResponse);
+            return uploadResultMapper.toUploadResult(putObjectRequest, putObjectResponse.eTag().replace("\"", ""));
 
         } catch (S3Exception ex) {
             log.error("S3 Provider rejected the upload request", ex);
@@ -176,14 +177,14 @@ public class StorageImpl implements Storage {
 
     private Map<String, String> createMetadata(UploadInput uploadInput, String mimeType, String type, String extension) {
         return Map.of(
-                "originalFilename", uploadInput.fileName(),
-                "entityId", UUID.randomUUID().toString(),
-                "entityType", StoredFile.class.getSimpleName(),
-                "mimeType", mimeType,
-                "mediaType", type,
-                "fileExtension", extension,
-                "uploadedAt", Instant.now().toString(),
-                "uploadedBy", UUID.randomUUID().toString()
+                FileMetadataName.ORIGINAL_FILENAME.getValue(), uploadInput.fileName(),
+                FileMetadataName.ENTITY_ID.getValue(), UUID.randomUUID().toString(),
+                FileMetadataName.ENTITY_TYPE.getValue(), StoredFile.class.getSimpleName(),
+                FileMetadataName.MIME_TYPE.getValue(), mimeType,
+                FileMetadataName.MEDIA_TYPE.getValue(), type,
+                FileMetadataName.FILE_EXTENSION.getValue(), extension,
+                FileMetadataName.UPLOADED_AT.getValue(), Instant.now().toString(),
+                FileMetadataName.UPLOADED_BY.getValue(), UUID.randomUUID().toString()
         );
     }
 

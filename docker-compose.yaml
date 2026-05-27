@@ -15,7 +15,7 @@ services:
       SSL_KEY_STORE: file:/run/secrets/upfile_tls_keystore
       JWT_PUBLIC_KEY: file:/run/secrets/jwt_public_key
       JWT_PRIVATE_KEY: file:/run/secrets/jwt_private_key
-      SPRING_SQL_INIT_DATA_LOCATIONS: file:/app/db/data/seed_tb_users.sql,file:/app/db/data/seed_tb_countries.sql
+      SPRING_SQL_INIT_DATA_LOCATIONS: file:/app/db/data/seed_tb_users.sql
       SPRING_FLYWAY_LOCATIONS: filesystem:/app/db/migration
       LOG_CONFIG_PATH: file:/app/config/logback-spring.xml
       LOG_PATH: /app/logs
@@ -23,7 +23,6 @@ services:
       - "127.0.0.1:${SERVER_PORT:-8443}:${SERVER_PORT:-8443}"
     volumes:
       - ./src/main/resources/db/data/seed_tb_users.sql:/app/db/data/seed_tb_users.sql:ro
-      - ./src/main/resources/db/data/seed_tb_countries.sql:/app/db/data/seed_tb_countries.sql:ro
       - ./src/main/resources/db/migration:/app/db/migration:ro
       - ./src/main/resources/logback-spring.xml:/app/config/logback-spring.xml:ro
       - ./logs:/app/logs:rw

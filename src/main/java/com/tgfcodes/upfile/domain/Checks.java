@@ -1,5 +1,6 @@
 package com.tgfcodes.upfile.domain;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static java.util.Objects.isNull;
@@ -16,5 +17,9 @@ public class Checks {
 
     public static void requireNonEmpty(String value, Supplier<? extends RuntimeException> exceptionSupplier) {
         if (isNull(value) || value.isBlank()) throw exceptionSupplier.get();
+    }
+
+    public static void requireNonEmpty(Map<?, ?> value, Supplier<? extends RuntimeException> exceptionSupplier) {
+        if (isNull(value) || value.isEmpty()) throw exceptionSupplier.get();
     }
 }

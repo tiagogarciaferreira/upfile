@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id", onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_stored_files")
 @EntityListeners(AuditingEntityListener.class)
@@ -45,11 +45,16 @@ public class StoredFileEntity {
 
     private Long size;
 
-    @CreatedBy
-    @Column(name = "created_by_user_id")
-    private UUID createdByUserId;
+    @Column(name = "mime_type")
+    private String mimeType;
+
+    private String type;
 
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
+
+    @CreatedBy
+    @Column(name = "created_by_user_id")
+    private UUID createdByUserId;
 }

@@ -1,5 +1,5 @@
 {
-  "ID": "ai-knowledge-base-policy-v1",
+  "ID": "upfile-api-policy-v1",
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -9,7 +9,7 @@
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::ai-knowledge-base"
+        "arn:aws:s3:::upfile-api"
       ]
     },
     {
@@ -21,7 +21,7 @@
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::ai-knowledge-base/*"
+        "arn:aws:s3:::upfile-api/*"
       ]
     }
   ]
