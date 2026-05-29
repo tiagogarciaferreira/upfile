@@ -6,6 +6,8 @@ public interface Storage {
 
     UploadRetrieve retrieve(String bucket, String key);
 
+    StorageStream download(String bucket, String key);
+
     void delete(String bucket, String key);
 
     boolean existsBucket(String bucket);

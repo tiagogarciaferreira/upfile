@@ -21,6 +21,7 @@ public class StoredFilesImpl implements StoredFiles {
     @Override
     public StoredFile save(StoredFile storedFile) {
         StoredFileEntity storedFileEntity = storedFileMapper.toEntity(storedFile);
+        storedFileEntity.setCreatedByUserId(UUID.fromString("cab2ae93-e295-48da-b0b3-5958cd6e0434"));
         storedFileEntity = storedFileRepository.save(storedFileEntity);
         return storedFileMapper.toDomain(storedFileEntity);
     }

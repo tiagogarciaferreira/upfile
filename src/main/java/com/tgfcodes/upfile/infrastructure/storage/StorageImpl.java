@@ -161,6 +161,21 @@ public class StorageImpl implements Storage {
         }
     }
 
+    @Override
+    public StorageStream download(String bucket, String key) {
+        checkBucketExists(bucket);
+        checkFileExists(bucket, key);
+
+        try {
+            ResponseInputStream<GetObjectResponse> response = s3Client.getObject(builder -> builder.bucket(bucket).key(key));
+            return StorageStream.from(response);
+
+        } catch (S3Exception ex) {
+            log.error("Failed to download file '{}' from S3 bucket '{}'", key, bucket, ex);
+            throw new StorageException("Failed to download file '%s' from bucket '%s'".formatted(key, bucket));
+        }
+    }
+
     private void checkBucketExists(String bucket) {
         if (!existsBucket(bucket)) {
             log.error("Bucket '{}' does not exist", bucket);
