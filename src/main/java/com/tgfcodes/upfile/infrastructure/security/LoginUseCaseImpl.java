@@ -1,8 +1,8 @@
 package com.tgfcodes.upfile.infrastructure.security;
 
-import com.tgfcodes.upfile.application.LoginInput;
-import com.tgfcodes.upfile.application.LoginOutput;
-import com.tgfcodes.upfile.application.LoginUseCase;
+import com.tgfcodes.upfile.application.input.LoginInput;
+import com.tgfcodes.upfile.application.output.LoginOutput;
+import com.tgfcodes.upfile.application.usecase.LoginUseCase;
 import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 import lombok.RequiredArgsConstructor;

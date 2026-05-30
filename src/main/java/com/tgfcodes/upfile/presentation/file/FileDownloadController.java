@@ -1,7 +1,7 @@
 package com.tgfcodes.upfile.presentation.file;
 
-import com.tgfcodes.upfile.application.DownloadFileUseCase;
-import com.tgfcodes.upfile.application.FileDownloadOutput;
+import com.tgfcodes.upfile.application.output.FileDownloadOutput;
+import com.tgfcodes.upfile.application.usecase.DownloadFileUseCase;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

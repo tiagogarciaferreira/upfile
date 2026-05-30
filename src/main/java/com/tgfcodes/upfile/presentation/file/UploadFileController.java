@@ -1,6 +1,11 @@
 package com.tgfcodes.upfile.presentation.file;
 
-import com.tgfcodes.upfile.application.*;
+import com.tgfcodes.upfile.application.input.UploadFileInput;
+import com.tgfcodes.upfile.application.output.FileDetailsOutput;
+import com.tgfcodes.upfile.application.output.UploadFileOutput;
+import com.tgfcodes.upfile.application.usecase.DeleteFileUseCase;
+import com.tgfcodes.upfile.application.usecase.GetFileDetailsUseCase;
+import com.tgfcodes.upfile.application.usecase.UploadFileUseCase;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +41,14 @@ public class UploadFileController {
             return ResponseEntity.badRequest().build();
         }
 
-        UploadFileCommand uploadFileCommand = new UploadFileCommand(
+        UploadFileInput uploadFileInput = new UploadFileInput(
                 file.getOriginalFilename(),
                 file.getContentType(),
                 file.getSize(),
                 file::getInputStream
         );
 
-        UploadFileOutput uploadFileOutput = uploadFileUseCase.execute(uploadFileCommand);
+        UploadFileOutput uploadFileOutput = uploadFileUseCase.execute(uploadFileInput);
         UploadFileResponse uploadFileResponse = UploadFileResponse.from(uploadFileOutput);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -1,4 +1,4 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.usecase;
 
 import com.tgfcodes.upfile.application.annotations.AppTransactional;
 import com.tgfcodes.upfile.domain.Checks;

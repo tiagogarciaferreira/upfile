@@ -1,4 +1,4 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.output;
 
 import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;

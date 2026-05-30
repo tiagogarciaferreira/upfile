@@ -1,6 +1,8 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.usecase;
 
 import com.tgfcodes.upfile.application.annotations.AppTransactional;
+import com.tgfcodes.upfile.application.input.UploadFileInput;
+import com.tgfcodes.upfile.application.output.UploadFileOutput;
 import com.tgfcodes.upfile.domain.annotations.AppService;
 import com.tgfcodes.upfile.domain.storedfile.FileDeduplicationService;
 import com.tgfcodes.upfile.domain.storedfile.FileHashCalculator;
@@ -46,7 +48,7 @@ public class UploadFileUseCase {
     }
 
     @AppTransactional
-    public UploadFileOutput execute(UploadFileCommand command) {
+    public UploadFileOutput execute(UploadFileInput command) {
 
         String hash = calculateHash(command);
         deduplicationService.ensureUniqueness(hash);
@@ -80,7 +82,7 @@ public class UploadFileUseCase {
         return UploadFileOutput.from(storedFile);
     }
 
-    private String calculateHash(UploadFileCommand command) {
+    private String calculateHash(UploadFileInput command) {
         try (InputStream inputStream = command.streamSupplier().call()) {
             return hashCalculator.calculateHash(inputStream);
 
@@ -90,7 +92,7 @@ public class UploadFileUseCase {
         }
     }
 
-    private UploadResult uploadToStorage(UploadFileCommand command, String hash) {
+    private UploadResult uploadToStorage(UploadFileInput command, String hash) {
         try (InputStream inputStream = command.streamSupplier().call()) {
             UploadInput uploadInput = new UploadInput(
                     command.fileName(),

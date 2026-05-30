@@ -1,6 +1,7 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.usecase;
 
 import com.tgfcodes.upfile.application.annotations.AppTransactional;
+import com.tgfcodes.upfile.application.output.FileDownloadOutput;
 import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.annotations.AppService;
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;

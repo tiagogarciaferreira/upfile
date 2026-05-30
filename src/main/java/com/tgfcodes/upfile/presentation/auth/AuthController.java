@@ -1,8 +1,8 @@
 package com.tgfcodes.upfile.presentation.auth;
 
-import com.tgfcodes.upfile.application.LoginInput;
-import com.tgfcodes.upfile.application.LoginOutput;
-import com.tgfcodes.upfile.application.LoginUseCase;
+import com.tgfcodes.upfile.application.input.LoginInput;
+import com.tgfcodes.upfile.application.output.LoginOutput;
+import com.tgfcodes.upfile.application.usecase.LoginUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -7,7 +7,7 @@ import com.nimbusds.jose.crypto.Ed25519Signer;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.tgfcodes.upfile.application.LoginOutput;
+import com.tgfcodes.upfile.application.output.LoginOutput;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jspecify.annotations.NullMarked;

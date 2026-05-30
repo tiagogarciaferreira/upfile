@@ -1,6 +1,7 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.usecase;
 
 import com.tgfcodes.upfile.application.annotations.AppTransactional;
+import com.tgfcodes.upfile.application.output.FileDetailsOutput;
 import com.tgfcodes.upfile.domain.annotations.AppService;
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;
 import com.tgfcodes.upfile.domain.storedfile.StoredFileNotFoundException;

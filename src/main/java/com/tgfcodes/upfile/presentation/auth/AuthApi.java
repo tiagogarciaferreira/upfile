@@ -1,6 +1,6 @@
 package com.tgfcodes.upfile.presentation.auth;
 
-import com.tgfcodes.upfile.application.LoginOutput;
+import com.tgfcodes.upfile.application.output.LoginOutput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

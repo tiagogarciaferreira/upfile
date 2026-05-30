@@ -1,6 +1,6 @@
 package com.tgfcodes.upfile.presentation.file;
 
-import com.tgfcodes.upfile.application.FileDetailsOutput;
+import com.tgfcodes.upfile.application.output.FileDetailsOutput;
 import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 
