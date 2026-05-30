@@ -8,6 +8,8 @@ public interface Storage {
 
     StorageStream download(String bucket, String key);
 
+    void clearBucket(String bucket);
+
     void delete(String bucket, String key);
 
     boolean existsBucket(String bucket);

@@ -7,6 +7,9 @@
 DELETE
 FROM tb_users;
 
+DELETE
+FROM tb_stored_files;
+
 INSERT INTO tb_users (name, username, email, active, password_hash, scopes)
 VALUES ('Read User',
         'user_read',

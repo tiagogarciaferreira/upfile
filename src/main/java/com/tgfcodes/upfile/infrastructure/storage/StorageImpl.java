@@ -1,5 +1,6 @@
 package com.tgfcodes.upfile.infrastructure.storage;
 
+import com.tgfcodes.upfile.domain.Checks;
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;
 import com.tgfcodes.upfile.domain.upload.*;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -174,6 +172,18 @@ public class StorageImpl implements Storage {
             log.error("Failed to download file '{}' from S3 bucket '{}'", key, bucket, ex);
             throw new StorageException("Failed to download file '%s' from bucket '%s'".formatted(key, bucket));
         }
+    }
+
+    @Override
+    public void clearBucket(String bucket) {
+        Checks.requireNonEmpty(bucket, () -> new IllegalArgumentException("Bucket name cannot be empty"));
+        checkBucketExists(bucket);
+
+        DeleteObjectsRequest deleteBucketRequest = DeleteObjectsRequest.builder()
+                .bucket(bucket)
+                .build();
+
+        s3Client.deleteObjects(deleteBucketRequest);
     }
 
     private void checkBucketExists(String bucket) {
