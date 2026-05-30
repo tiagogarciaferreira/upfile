@@ -1,5 +1,7 @@
 package com.tgfcodes.upfile.infrastructure.config;
 
+import com.tgfcodes.upfile.infrastructure.security.SecurityCheck;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
@@ -11,9 +13,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableJpaAuditing(dateTimeProviderRef = "dateTimeProvider", auditorAwareRef = "auditorProvider")
-public class SpringDataAuditingConfig {
+public class JpaAuditingConfig {
+
+    private final SecurityCheck securityCheck;
 
     @Bean
     public DateTimeProvider dateTimeProvider() {
@@ -22,6 +27,6 @@ public class SpringDataAuditingConfig {
 
     @Bean
     public AuditorAware<UUID> auditorProvider() {
-        return () -> Optional.of(UUID.randomUUID());
+        return () -> Optional.of(securityCheck.getAuthenticatedUserId());
     }
 }

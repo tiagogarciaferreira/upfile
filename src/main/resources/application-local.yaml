@@ -35,12 +35,13 @@ spring:
         jdbc:
           fetch_size: 50
           batch_size: 50
+
         order_inserts: true
         order_updates: true
 
-      format_sql: true
-      show_sql: true
-
+        show_sql: false
+        format_sql: false
+  
   sql:
     init:
       mode: always

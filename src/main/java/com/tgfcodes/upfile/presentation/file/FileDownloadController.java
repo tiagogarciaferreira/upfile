@@ -1,4 +1,4 @@
-package com.tgfcodes.upfile.presentation;
+package com.tgfcodes.upfile.presentation.file;
 
 import com.tgfcodes.upfile.application.DownloadFileUseCase;
 import com.tgfcodes.upfile.application.FileDownloadOutput;
