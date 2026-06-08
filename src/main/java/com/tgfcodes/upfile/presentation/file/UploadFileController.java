@@ -1,11 +1,17 @@
 package com.tgfcodes.upfile.presentation.file;
 
+import com.tgfcodes.upfile.application.SearchFilesFilter;
+import com.tgfcodes.upfile.application.SearchFilesUseCase;
 import com.tgfcodes.upfile.application.input.UploadFileInput;
 import com.tgfcodes.upfile.application.output.FileDetailsOutput;
 import com.tgfcodes.upfile.application.output.UploadFileOutput;
+import com.tgfcodes.upfile.application.query.FileMetadataOutput;
+import com.tgfcodes.upfile.application.query.PageResultOutput;
 import com.tgfcodes.upfile.application.usecase.DeleteFileUseCase;
 import com.tgfcodes.upfile.application.usecase.GetFileDetailsUseCase;
 import com.tgfcodes.upfile.application.usecase.UploadFileUseCase;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +38,8 @@ public class UploadFileController {
     private final GetFileDetailsUseCase fileDetailsUseCase;
 
     private final DeleteFileUseCase deleteFileUseCase;
+
+    private final SearchFilesUseCase searchFilesUseCase;
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadFileResponse> upload(@RequestParam(value = "file") MultipartFile file) {
@@ -75,5 +83,35 @@ public class UploadFileController {
         deleteFileUseCase.execute(id);
         log.info("File deleted successfully");
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<FileMetadata>> search(@ModelAttribute SearchFileRequest searchFileRequest,
+                                                             @RequestParam(defaultValue = "0") @Min(0) @Max(999) int page,
+                                                             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+                                                             @RequestParam(defaultValue = "type,asc") String sort) {
+
+        SearchFilesFilter searchFilesFilter = new SearchFilesFilter(
+                searchFileRequest.fileName(),
+                searchFileRequest.extension(),
+                searchFileRequest.type(),
+                searchFileRequest.startDate(),
+                searchFileRequest.endDate(),
+                page,
+                size,
+                sort
+        );
+
+        PageResultOutput<FileMetadataOutput> execute = searchFilesUseCase.execute(searchFilesFilter);
+
+        PageResponse<FileMetadata> pageResponse = new PageResponse<>(
+                execute.content().stream().map(FileMetadata::from).toList(),
+                execute.page(),
+                execute.size(),
+                execute.totalElements(),
+                execute.totalPages());
+
+        log.info("Files searched successfully");
+        return ResponseEntity.ok(pageResponse);
     }
 }

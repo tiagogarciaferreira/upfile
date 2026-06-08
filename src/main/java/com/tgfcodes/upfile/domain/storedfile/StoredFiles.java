@@ -12,4 +12,6 @@ public interface StoredFiles {
     boolean existsByHash(String hash);
 
     void deleteById(UUID id);
+
+    PageResult<StoredFile> search(StoredFileFilter storedFileFilter);
 }

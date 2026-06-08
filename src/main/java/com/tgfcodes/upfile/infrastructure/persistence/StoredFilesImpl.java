@@ -1,8 +1,14 @@
 package com.tgfcodes.upfile.infrastructure.persistence;
 
+import com.tgfcodes.upfile.domain.storedfile.PageResult;
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;
+import com.tgfcodes.upfile.domain.storedfile.StoredFileFilter;
 import com.tgfcodes.upfile.domain.storedfile.StoredFiles;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,5 +45,27 @@ public class StoredFilesImpl implements StoredFiles {
     @Override
     public void deleteById(UUID id) {
         storedFileRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResult<StoredFile> search(StoredFileFilter storedFileFilter) {
+
+        Specification<StoredFileEntity> storedFileEntitySpecification = StoredFileSpecification.from(storedFileFilter);
+        StoredFileFilter.Sort sortFilter = storedFileFilter.sort();
+        StoredFileFilter.Page pageFilter = storedFileFilter.page();
+
+        Page<StoredFileEntity> page = storedFileRepository.findAll(
+                storedFileEntitySpecification,
+                PageRequest.of(pageFilter.pageNumber(), pageFilter.pageSize(),
+                        Sort.by(Sort.Direction.fromString(sortFilter.direction()), sortFilter.field()))
+        );
+
+        return new PageResult<>(
+                page.getContent().stream().map(storedFileMapper::toDomain).toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 }
