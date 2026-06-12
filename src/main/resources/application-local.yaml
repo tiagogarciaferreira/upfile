@@ -115,3 +115,45 @@ security:
     expiration-seconds: 600
     public-key: ${JWT_PUBLIC_KEY}
     private-key: ${JWT_PRIVATE_KEY}
+
+springdoc:
+  api-docs:
+    enabled: true
+    version: openapi-3-1
+
+  packages-to-scan:
+    - 'com.tgfcodes.upfile.application'
+    - 'com.tgfcodes.upfile.presentation'
+
+  show-actuator: false
+  paths-to-match: /api/**
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  model-and-view-allowed: false
+  use-fqn: false
+  remove-broken-reference-definitions: true
+
+  cache:
+    disabled: true
+
+  swagger-ui:
+    path: /docs
+    enabled: true
+    disable-swagger-default-url: true
+    filter: false
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+    persistAuthorization: true
+    displayOperationId: true
+
+    deepLinking: true
+    syntax-highlight:
+      activated: true
+      theme: monokai
+
+    csrf:
+      enabled: true
+      cookie-name: XSRF-TOKEN
+      header-name: X-XSRF-TOKEN
