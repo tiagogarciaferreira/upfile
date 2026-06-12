@@ -4,8 +4,6 @@ public interface Storage {
 
     UploadResult store(String bucket, UploadInput uploadInput);
 
-    UploadRetrieve retrieve(String bucket, String key);
-
     StorageStream download(String bucket, String key);
 
     void clearBucket(String bucket);

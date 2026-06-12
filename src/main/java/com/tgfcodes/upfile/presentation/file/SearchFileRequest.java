@@ -18,7 +18,7 @@ public record SearchFileRequest(
         )
         String fileName,
 
-        @Size(max = 10, message = "extension must not exceed 20 characters.")
+        @Size(max = 10, message = "extension must not exceed 10 characters.")
         @Pattern(
                 regexp = "^[a-zA-Z]+$",
                 message = "extension must contain only letters."

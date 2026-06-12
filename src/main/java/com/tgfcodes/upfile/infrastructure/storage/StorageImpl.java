@@ -1,6 +1,7 @@
 package com.tgfcodes.upfile.infrastructure.storage;
 
 import com.tgfcodes.upfile.domain.Checks;
+import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 import com.tgfcodes.upfile.domain.storedfile.StoredFile;
 import com.tgfcodes.upfile.domain.upload.*;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.apache.tika.Tika;
 import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -19,8 +21,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import static java.lang.Boolean.TRUE;
+import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @NullMarked
@@ -37,7 +44,7 @@ public class StorageImpl implements Storage {
 
     private final UploadResultMapper uploadResultMapper;
 
-    private final UploadRetrieveMapper uploadRetrieveMapper;
+    private final Environment environment;
 
     @SneakyThrows
     @Override
@@ -104,21 +111,6 @@ public class StorageImpl implements Storage {
     }
 
     @Override
-    public UploadRetrieve retrieve(String bucket, String key) {
-        checkBucketExists(bucket);
-        checkFileExists(bucket, key);
-
-        try {
-            ResponseInputStream<GetObjectResponse> response = s3Client.getObject(builder -> builder.bucket(bucket).key(key));
-            return uploadRetrieveMapper.toUploadRetrieve(response);
-
-        } catch (S3Exception ex) {
-            log.error("File '{}' not found in S3 bucket '{}'", key, bucket, ex);
-            throw new StorageException("File '%s' not found in bucket '%s'".formatted(bucket, key));
-        }
-    }
-
-    @Override
     public void delete(String bucket, String key) {
         checkBucketExists(bucket);
         checkFileExists(bucket, key);
@@ -176,14 +168,47 @@ public class StorageImpl implements Storage {
 
     @Override
     public void clearBucket(String bucket) {
-        Checks.requireNonEmpty(bucket, () -> new IllegalArgumentException("Bucket name cannot be empty"));
+
+        Set<String> activeProfiles = Set.of(environment.getActiveProfiles());
+        if (activeProfiles.isEmpty() || !activeProfiles.contains("local")) {
+
+            log.warn("Clear bucket blocked. Bucket '{}', activeProfiles '{}'. Operation allowed only in 'local' profile.",
+                    bucket, activeProfiles);
+
+            throw new StorageException(
+                    "Clear bucket not allowed outside 'local' profile. bucket '%s', activeProfiles '%s'"
+                            .formatted(bucket, activeProfiles)
+            );
+        }
+
+        Checks.requireNonEmpty(bucket, () -> new DomainValidationException("Bucket name cannot be empty"));
         checkBucketExists(bucket);
 
-        DeleteObjectsRequest deleteBucketRequest = DeleteObjectsRequest.builder()
-                .bucket(bucket)
-                .build();
+        String continuationToken = null;
 
-        s3Client.deleteObjects(deleteBucketRequest);
+        do {
+            ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
+                    .bucket(bucket)
+                    .continuationToken(continuationToken)
+                    .maxKeys(1000)
+                    .build();
+
+            ListObjectsV2Response response = s3Client.listObjectsV2(listObjectsRequest);
+
+            List<ObjectIdentifier> batch = response.contents().stream()
+                    .map(s3Object -> ObjectIdentifier.builder().key(s3Object.key()).build())
+                    .toList();
+
+            if (!batch.isEmpty()) {
+                s3Client.deleteObjects(DeleteObjectsRequest.builder()
+                        .bucket(bucket)
+                        .delete(builder -> builder.objects(batch))
+                        .build());
+            }
+
+            continuationToken = TRUE.equals(response.isTruncated()) ? response.nextContinuationToken() : null;
+
+        } while (!isNull(continuationToken));
     }
 
     private void checkBucketExists(String bucket) {

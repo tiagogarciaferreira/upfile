@@ -10,12 +10,14 @@ import com.tgfcodes.upfile.application.query.PageResultOutput;
 import com.tgfcodes.upfile.application.usecase.DeleteFileUseCase;
 import com.tgfcodes.upfile.application.usecase.GetFileDetailsUseCase;
 import com.tgfcodes.upfile.application.usecase.UploadFileUseCase;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,6 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RequiredArgsConstructor
+@Validated
 @RestController
 @RequestMapping(value = "/api/files", version = "1.0")
 public class UploadFileController {
@@ -86,9 +89,9 @@ public class UploadFileController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<FileMetadata>> search(@ModelAttribute SearchFileRequest searchFileRequest,
-                                                             @RequestParam(defaultValue = "0") @Min(0) @Max(999) int page,
-                                                             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+    public ResponseEntity<PageResponse<FileMetadata>> search(@Valid @ModelAttribute SearchFileRequest searchFileRequest,
+                                                             @RequestParam(defaultValue = "0") @Min(0) @Max(999) int pageNumber,
+                                                             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int pageSize,
                                                              @RequestParam(defaultValue = "type,asc") String sort) {
 
         SearchFilesFilter searchFilesFilter = new SearchFilesFilter(
@@ -97,8 +100,8 @@ public class UploadFileController {
                 searchFileRequest.type(),
                 searchFileRequest.startDate(),
                 searchFileRequest.endDate(),
-                page,
-                size,
+                pageNumber,
+                pageSize,
                 sort
         );
 
