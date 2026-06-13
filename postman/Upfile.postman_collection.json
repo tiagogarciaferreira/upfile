@@ -1,0 +1,461 @@
+{
+  "info": {
+    "_postman_id": "30ac480c-f419-4427-9145-71b528d76642",
+    "name": "Upfile",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47716629",
+    "_collection_link": "https://go.postman.co/collection/47716629-30ac480c-f419-4427-9145-71b528d76642?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "const accessToken = response.accessToken;",
+                  "pm.environment.set(\"accessToken\", accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "strictSSL": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{userAdmin}}\",\n    \"password\": \"{{userAdminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/auth/login",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Read",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "const accessToken = response.accessToken;",
+                  "pm.environment.set(\"accessToken\", accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "strictSSL": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{userRead}}\",\n    \"password\": \"{{userReadPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/auth/login",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Management",
+      "item": [
+        {
+          "name": "Upload",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "23456",
+                  "type": "text",
+                  "uuid": "43a635ce-a7c6-4b76-bdd1-3a98d7329044"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files/:fileId",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files",
+                ":fileId"
+              ],
+              "variable": [
+                {
+                  "key": "fileId",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files?pageNumber=10&pageSize=1&fileName=&extension=&type=&startDate=&endDate=",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files"
+              ],
+              "query": [
+                {
+                  "key": "pageNumber",
+                  "value": "10",
+                  "description": "Defines which page of results to retrieve (zero-based index).\nExample: 0 = first page, 1 = second page."
+                },
+                {
+                  "key": "pageSize",
+                  "value": "1",
+                  "description": "Defines the number of records returned per page.\nExample: 10 returns up to 10 items per page."
+                },
+                {
+                  "key": "fileName",
+                  "value": ""
+                },
+                {
+                  "key": "extension",
+                  "value": ""
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                },
+                {
+                  "key": "startDate",
+                  "value": ""
+                },
+                {
+                  "key": "endDate",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files/:fileId",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files",
+                ":fileId"
+              ],
+              "variable": [
+                {
+                  "key": "fileId",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files/:fileId/download",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files",
+                ":fileId",
+                "download"
+              ],
+              "variable": [
+                {
+                  "key": "fileId",
+                  "value": "{{$randomUUID}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{accessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
