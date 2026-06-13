@@ -10,6 +10,7 @@ import com.tgfcodes.upfile.application.query.PageResultOutput;
 import com.tgfcodes.upfile.application.usecase.DeleteFileUseCase;
 import com.tgfcodes.upfile.application.usecase.GetFileDetailsUseCase;
 import com.tgfcodes.upfile.application.usecase.UploadFileUseCase;
+import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,7 +33,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @Validated
 @RestController
 @RequestMapping(value = "/api/files", version = "1.0")
-public class UploadFileController {
+public class UploadFileController implements FilesApi {
 
     private static final Logger log = LoggerFactory.getLogger(UploadFileController.class);
 
@@ -44,12 +45,13 @@ public class UploadFileController {
 
     private final SearchFilesUseCase searchFilesUseCase;
 
+    @Override
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadFileResponse> upload(@RequestParam(value = "file") MultipartFile file) {
 
         if (file.isEmpty()) {
             log.error("Empty file received.");
-            return ResponseEntity.badRequest().build();
+            throw new DomainValidationException("File cannot be empty");
         }
 
         UploadFileInput uploadFileInput = new UploadFileInput(
@@ -71,8 +73,9 @@ public class UploadFileController {
         return ResponseEntity.created(location).body(uploadFileResponse);
     }
 
+    @Override
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FileDetailsResponse> getFileDetails(@PathVariable UUID id) {
+    public ResponseEntity<FileDetailsResponse> details(@PathVariable UUID id) {
 
         FileDetailsOutput fileDetailsOutput = fileDetailsUseCase.execute(id);
         FileDetailsResponse fileDetailsResponse = FileDetailsResponse.from(fileDetailsOutput);
@@ -81,6 +84,7 @@ public class UploadFileController {
         return ResponseEntity.ok(fileDetailsResponse);
     }
 
+    @Override
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteFileUseCase.execute(id);
@@ -88,6 +92,7 @@ public class UploadFileController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<PageResponse<FileMetadata>> search(@Valid @ModelAttribute SearchFileRequest searchFileRequest,
                                                              @RequestParam(defaultValue = "0") @Min(0) @Max(999) int pageNumber,

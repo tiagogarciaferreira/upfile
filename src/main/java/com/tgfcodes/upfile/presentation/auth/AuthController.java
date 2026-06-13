@@ -21,9 +21,10 @@ public class AuthController implements AuthApi {
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<LoginOutput> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         LoginOutput loginOutput = loginUseCase.execute(new LoginInput(loginRequest.username(), loginRequest.password()));
+        LoginResponse loginResponse = LoginResponse.from(loginOutput);
         log.info("User logged in: {}", loginRequest);
-        return ResponseEntity.ok().body(loginOutput);
+        return ResponseEntity.ok().body(loginResponse);
     }
 }

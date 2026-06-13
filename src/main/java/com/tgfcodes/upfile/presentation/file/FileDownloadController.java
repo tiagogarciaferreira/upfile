@@ -3,8 +3,6 @@ package com.tgfcodes.upfile.presentation.file;
 import com.tgfcodes.upfile.application.output.FileDownloadOutput;
 import com.tgfcodes.upfile.application.usecase.DownloadFileUseCase;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -21,14 +19,13 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/files", version = "1.0")
-public class FileDownloadController {
-
-    private static final Logger log = LoggerFactory.getLogger(FileDownloadController.class);
+public class FileDownloadController implements DownloadsApi {
 
     private final DownloadFileUseCase downloadFileUseCase;
 
+    @Override
     @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadFile(@PathVariable UUID id) {
+    public ResponseEntity<Resource> download(@PathVariable UUID id) {
 
         FileDownloadOutput fileDownload = downloadFileUseCase.execute(id);
         InputStreamResource inputStreamResource = new InputStreamResource(fileDownload.stream());

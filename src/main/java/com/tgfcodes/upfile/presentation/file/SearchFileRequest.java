@@ -1,5 +1,6 @@
 package com.tgfcodes.upfile.presentation.file;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
@@ -42,18 +43,21 @@ public record SearchFileRequest(
 
     private static final Instant MIN_DATE = Instant.parse("2000-01-01T00:00:00Z");
 
+    @Hidden
     @AssertTrue(message = "startDate must be before or equal to endDate.")
     public boolean isDateRangeValid() {
         if (isNull(startDate) || isNull(endDate)) return true;
         return !startDate.isAfter(endDate);
     }
 
+    @Hidden
     @AssertTrue(message = "startDate must not be before 2000-01-01T00:00:00Z.")
     public boolean isStartDateAfterMin() {
         if (isNull(startDate)) return true;
         return !startDate.isBefore(MIN_DATE);
     }
 
+    @Hidden
     @AssertTrue(message = "endDate must not be before 2000-01-01T00:00:00Z.")
     public boolean isEndDateAfterMin() {
         if (isNull(endDate)) return true;
