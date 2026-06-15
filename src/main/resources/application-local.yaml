@@ -101,6 +101,32 @@ logging:
     org.springframework: WARN
     org.hibernate: WARN
 
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include:
+          - health
+          - info
+  endpoint:
+    health:
+      show-details: never
+      show-components: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include:
+            - db
+            - readinessState
+        liveness:
+          include:
+            - livenessState
+            - diskSpace
+    shutdown:
+      access: none
+
 storage:
   bucket: ${STORAGE_BUCKET_NAME}
   region: ${STORAGE_REGION_NAME}

@@ -3,6 +3,7 @@ package com.tgfcodes.upfile.infrastructure.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -32,12 +33,17 @@ public class WebSecurityConfig {
 
     private final JwtDecoder jwtDecoder;
 
+    private final Environment environment;
+
     private static final String FILES_PATH = "/api/files";
 
     private static final String FILES_PATH_WILDCARD = FILES_PATH + "/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
+
+        final String hostname = environment.getRequiredProperty("HOSTNAME", String.class);
+
         return httpSecurity
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(csrf -> csrf
@@ -57,8 +63,8 @@ public class WebSecurityConfig {
                                 .policyDirectives("default-src 'self'; "
                                         .concat("script-src 'self' 'unsafe-inline' 'unsafe-eval'; ")
                                         .concat("style-src 'self' 'unsafe-inline'; ")
-                                        .concat("img-src 'self' data: https://api.upfile.tgfcodes.com; ")
-                                        .concat("connect-src 'self' https://api.upfile.tgfcodes.com;")
+                                        .concat("img-src 'self' data: https://%s; ".formatted(hostname))
+                                        .concat("connect-src 'self' https://%s;".formatted(hostname))
                                 )
                         )
                         .contentTypeOptions(withDefaults())
