@@ -5,10 +5,10 @@
 -- =============================================================================
 
 DELETE
-FROM tb_users;
+FROM tb_stored_files;
 
 DELETE
-FROM tb_stored_files;
+FROM tb_users;
 
 INSERT INTO tb_users (name, username, email, active, password_hash, scopes)
 VALUES ('Read User',

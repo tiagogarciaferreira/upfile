@@ -8,8 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
@@ -52,9 +56,9 @@ public interface FilesApi {
     @ApiResponse(responseCode = "400", description = "Invalid query filter parameters or pagination indices", content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     @ApiResponse(responseCode = "500", description = "An unexpected internal server error occurred while processing the request", content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<PageResponse<FileMetadata>> search(
-            SearchFileRequest searchFileRequest,
-            @Parameter(description = "Page cursor index", schema = @Schema(defaultValue = "0")) int pageNumber,
-            @Parameter(description = "Page chunk size slice window", schema = @Schema(defaultValue = "10")) int pageSize,
+            @Valid @ModelAttribute SearchFileRequest searchFileRequest,
+            @Parameter(description = "Page cursor index", schema = @Schema(defaultValue = "0")) @Min(0) @Max(999) int pageNumber,
+            @Parameter(description = "Page chunk size slice window", schema = @Schema(defaultValue = "10")) @Min(1) @Max(100) int pageSize,
             @Parameter(description = "Dynamic sort string (field,direction)", schema = @Schema(defaultValue = "type,asc")) String sort
     );
 }

@@ -255,7 +255,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleException(WebRequest request) {
+    public ResponseEntity<ProblemDetail> handleException(Exception ex, WebRequest request) {
         return build(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Internal Server Error",

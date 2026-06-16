@@ -13,6 +13,8 @@ public class StorageProperties {
 
     private String region;
 
+    private int linkTtlSeconds;
+
     private String endpoint;
 
     private String accessKey;

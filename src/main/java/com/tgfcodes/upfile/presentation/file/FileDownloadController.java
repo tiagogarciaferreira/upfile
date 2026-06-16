@@ -1,8 +1,12 @@
 package com.tgfcodes.upfile.presentation.file;
 
+import com.tgfcodes.upfile.application.output.DownloadLinkOutput;
 import com.tgfcodes.upfile.application.output.FileDownloadOutput;
 import com.tgfcodes.upfile.application.usecase.DownloadFileUseCase;
+import com.tgfcodes.upfile.application.usecase.DownloadLinkUseCase;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -21,7 +25,11 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @RequestMapping(value = "/api/files", version = "1.0")
 public class FileDownloadController implements DownloadsApi {
 
+    private static final Logger log = LoggerFactory.getLogger(FileDownloadController.class);
+
     private final DownloadFileUseCase downloadFileUseCase;
+
+    private final DownloadLinkUseCase downloadLinkUseCase;
 
     @Override
     @GetMapping("/{id}/download")
@@ -35,5 +43,13 @@ public class FileDownloadController implements DownloadsApi {
                 .contentType(MediaType.parseMediaType(fileDownload.contentType()))
                 .header(CONTENT_DISPOSITION, "%s; filename=\"%s\"".formatted(fileDownload.contentDisposition(), fileDownload.fileName()))
                 .body(inputStreamResource);
+    }
+
+    @GetMapping("/{id}/link")
+    public ResponseEntity<DownloadLinkResponse> link(@PathVariable UUID id) {
+        DownloadLinkOutput downloadLinkOutput = downloadLinkUseCase.execute(id);
+        DownloadLinkResponse downloadLinkResponse = DownloadLinkResponse.from(downloadLinkOutput);
+        log.info("Download link generated successfully");
+        return ResponseEntity.ok().body(downloadLinkResponse);
     }
 }

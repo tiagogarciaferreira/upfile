@@ -106,15 +106,18 @@ API para **upload de arquivos**, permitindo:
 
 ---
 
-### 🔐 Endpoints autenticados (requerem JWT)
+### 🔐 Endpoints Autenticados (JWT obrigatório)
 
-| Método | Endpoint                     | Descrição                               |
-|--------|------------------------------|-----------------------------------------|
-| POST   | /api/files                   | Cria uma nova serpente                  |
-| GET    | /api/files/{fileId}          | Busca uma serpente por ID               |
-| DELETE | /api/files/{fileId}          | Remove uma serpente                     |
-| GET    | /api/files                   | Lista serpentes com paginação e filtros |
-| GET    | /api/files/{fileId}/download | Proxy para imagem externa da serpente   |
+Todos os endpoints abaixo requerem autenticação via token JWT válido no header `Authorization`.
+
+| Método | Endpoint                     | Descrição                                                      |
+|--------|------------------------------|----------------------------------------------------------------|
+| POST   | /api/files                   | Realiza o upload de um novo arquivo                            |
+| GET    | /api/files/{fileId}          | Recupera os metadados de um arquivo pelo seu identificador     |
+| DELETE | /api/files/{fileId}          | Remove permanentemente um arquivo                              |
+| GET    | /api/files                   | Lista arquivos com suporte a paginação, ordenação e filtros    |
+| GET    | /api/files/{fileId}/download | Realiza o download direto do arquivo (streaming ou redirect)   |
+| GET    | /api/files/{fileId}/link     | Gera um link temporário (presigned URL) para acesso ao arquivo |
 
 > 🔐 Todos os endpoints da API de negócio (`/api/files/*`) exigem **Bearer Token JWT** obtido em `/api/auth/login`.  
 > Os endpoints do **Actuator** e o **login** são públicos.
@@ -214,20 +217,21 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 
 ## MinIO (Object Storage)
 
-| Variável                    | Descrição         | Exemplo                   | Observações                     |
-|-----------------------------|-------------------|---------------------------|---------------------------------|
-| **STORAGE_HOST**            | Host do MinIO     | `api.upfile.tgfcodes.com` | Endpoint S3-compatible          |
-| **STORAGE_PORT**            | Porta da API      | `9000`                    | Default MinIO                   |
-| **STORAGE_REGION_NAME**     | Região            | `region-name`             | Deve bater com config do bucket |
-| **STORAGE_ADMIN_USER**      | Usuário admin     | `admin-user`              | Acesso total                    |
-| **STORAGE_ADMIN_PASSWORD**  | Senha admin       | `password`                | Sensível                        |
-| **STORAGE_CONSOLE_PORT**    | Porta console web | `9001`                    | UI do MinIO                     |
-| **STORAGE_CONSOLE_ENABLE**  | Habilita console  | `true`                    | Desabilitar em produção pública |
-| **STORAGE_BUCKET_NAME**     | Nome do bucket    | `bucket-name`             | Deve existir ou ser criado      |
-| **STORAGE_ACCESS_KEY**      | Access key S3     | `access-key`              | Para acesso programático        |
-| **STORAGE_SECRET_KEY**      | Secret key S3     | `secret-key`              | Sensível                        |
-| **STORAGE_UPLOAD_USERNAME** | Usuário de upload | `upload-username`         | Escopo restrito                 |
-| **STORAGE_UPLOAD_PASSWORD** | Senha upload      | `upload-password`         | Sensível                        |
+| Variável                     | Descrição                      | Exemplo                   | Observações                     |
+|------------------------------|--------------------------------|---------------------------|---------------------------------|
+| **STORAGE_HOST**             | Host do MinIO                  | `api.upfile.tgfcodes.com` | Endpoint S3-compatible          |
+| **STORAGE_PORT**             | Porta da API                   | `9000`                    | Default MinIO                   |
+| **STORAGE_REGION_NAME**      | Região                         | `region-name`             | Deve bater com config do bucket |
+| **STORAGE_ADMIN_USER**       | Usuário admin                  | `admin-user`              | Acesso total                    |
+| **STORAGE_ADMIN_PASSWORD**   | Senha admin                    | `password`                | Sensível                        |
+| **STORAGE_CONSOLE_PORT**     | Porta console web              | `9001`                    | UI do MinIO                     |
+| **STORAGE_CONSOLE_ENABLE**   | Habilita console               | `true`                    | Desabilitar em produção pública |
+| **STORAGE_BUCKET_NAME**      | Nome do bucket                 | `bucket-name`             | Deve existir ou ser criado      |
+| **STORAGE_ACCESS_KEY**       | Access key S3                  | `access-key`              | Para acesso programático        |
+| **STORAGE_SECRET_KEY**       | Secret key S3                  | `secret-key`              | Sensível                        |
+| **STORAGE_UPLOAD_USERNAME**  | Usuário de upload              | `upload-username`         | Escopo restrito                 |
+| **STORAGE_UPLOAD_PASSWORD**  | Senha upload                   | `upload-password`         | Sensível                        |
+| **STORAGE_LINK_TTL_SECONDS** | Expiração de links em segundos | `600`                     | Valor de expiração              |
 
 ---
 
@@ -252,10 +256,10 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 Os seguintes usuários já existem no banco (via `seed_tb_users.sql`).  
 As senhas estão armazenadas como hash (**Argon2id**), mas os valores em texto claro para autenticação são:
 
-| Usuário (login) | Senha (texto claro)              | O que pode fazer                 |
-|-----------------|----------------------------------|----------------------------------|
-| user_read       | dLy87K594m59tDR18j4Uo7qX6VxguhT0 | Consultar arquivos (GET)         |
-| user_write      | AW4PuyBbSZxvTyYJXJADHj2K8RBTf63s | Criar, baixar e deletar arquivos |
+| Usuário (login) | Senha (texto claro)              | O que pode fazer                            |
+|-----------------|----------------------------------|---------------------------------------------|
+| user_read       | dLy87K594m59tDR18j4Uo7qX6VxguhT0 | Consultar arquivos (GET)                    |
+| user_write      | AW4PuyBbSZxvTyYJXJADHj2K8RBTf63s | Criar, baixar, pesquisar e deletar arquivos |
 
 ---
 

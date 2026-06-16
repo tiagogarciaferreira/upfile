@@ -130,6 +130,7 @@ management:
 storage:
   bucket: ${STORAGE_BUCKET_NAME}
   region: ${STORAGE_REGION_NAME}
+  link-ttl-seconds: ${STORAGE_LINK_TTL_SECONDS:60}
   endpoint: https://${STORAGE_HOST}:${STORAGE_PORT}
   access-key: ${STORAGE_ACCESS_KEY}
   secret-key: ${STORAGE_SECRET_KEY}

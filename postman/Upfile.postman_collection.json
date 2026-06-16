@@ -163,6 +163,11 @@
             "method": "POST",
             "header": [
               {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "type": "text"
+              },
+              {
                 "key": "{{version-header-name}}",
                 "value": "{{version}}",
                 "description": "API Version",
@@ -174,9 +179,9 @@
               "formdata": [
                 {
                   "key": "file",
-                  "value": "23456",
-                  "type": "text",
-                  "uuid": "43a635ce-a7c6-4b76-bdd1-3a98d7329044"
+                  "type": "file",
+                  "uuid": "43a635ce-a7c6-4b76-bdd1-3a98d7329044",
+                  "src": "/home/tgf/Pictures/background-pc.jpeg"
                 }
               ]
             },
@@ -345,7 +350,7 @@
               "variable": [
                 {
                   "key": "fileId",
-                  "value": "{{$randomUUID}}"
+                  "value": "5b7f2f64-d0a6-45a9-ac58-be91d3eba229"
                 }
               ]
             }
@@ -390,7 +395,52 @@
               "variable": [
                 {
                   "key": "fileId",
-                  "value": "{{$randomUUID}}"
+                  "value": "5b7f2f64-d0a6-45a9-ac58-be91d3eba229"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Link",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "{{version-header-name}}",
+                "value": "{{version}}",
+                "description": "API Version",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{protocol}}://{{host}}:{{port}}/api/files/:fileId/link",
+              "protocol": "{{protocol}}",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "files",
+                ":fileId",
+                "link"
+              ],
+              "variable": [
+                {
+                  "key": "fileId",
+                  "value": "5b7f2f64-d0a6-45a9-ac58-be91d3eba229"
                 }
               ]
             }

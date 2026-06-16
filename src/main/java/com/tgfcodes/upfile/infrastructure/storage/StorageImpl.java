@@ -16,10 +16,14 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +44,15 @@ public class StorageImpl implements Storage {
 
     private final S3Client s3Client;
 
+    private final S3Presigner s3Presigner;
+
     private final Tika tika;
 
-    private final UploadResultMapper uploadResultMapper;
-
     private final Environment environment;
+
+    private final StorageProperties storageProperties;
+
+    private final UploadResultMapper uploadResultMapper;
 
     @SneakyThrows
     @Override
@@ -52,7 +60,7 @@ public class StorageImpl implements Storage {
         checkBucketExists(bucket);
 
         String fileName = uploadInput.fileName().toLowerCase().trim();
-        String extension = getFileExtension(fileName);
+        String extension = getFileExtension(fileName).replace("jpg", "jpeg");
         String mimeType;
 
         InputStream safeStream = ensureMarkSupported(uploadInput.inputStream());
@@ -209,6 +217,27 @@ public class StorageImpl implements Storage {
             continuationToken = TRUE.equals(response.isTruncated()) ? response.nextContinuationToken() : null;
 
         } while (!isNull(continuationToken));
+    }
+
+    @Override
+    public LinkResult downloadLink(String bucket, String key) {
+
+        checkBucketExists(bucket);
+        checkFileExists(bucket, key);
+
+        try {
+            GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofSeconds(storageProperties.getLinkTtlSeconds()))
+                    .getObjectRequest(builder -> builder.bucket(bucket).key(key).build())
+                    .build();
+
+            PresignedGetObjectRequest presignedRequest = s3Presigner.presignGetObject(presignRequest);
+            return new LinkResult(presignedRequest.url().toString(), storageProperties.getLinkTtlSeconds());
+
+        } catch (S3Exception ex) {
+            log.error("Failed to generate download link for file '{}' in bucket '{}'", key, bucket, ex);
+            throw new StorageException("Failed to generate download link");
+        }
     }
 
     private void checkBucketExists(String bucket) {

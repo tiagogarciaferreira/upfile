@@ -13,4 +13,6 @@ public interface Storage {
     boolean existsBucket(String bucket);
 
     boolean existsFile(String bucket, String key);
+
+    LinkResult downloadLink(String bucket, String key);
 }

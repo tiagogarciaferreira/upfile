@@ -22,4 +22,8 @@ public class Checks {
     public static void requireNonEmpty(Map<?, ?> value, Supplier<? extends RuntimeException> exceptionSupplier) {
         if (isNull(value) || value.isEmpty()) throw exceptionSupplier.get();
     }
+
+    public static void requirePositive(Integer ttlSeconds, Supplier<? extends RuntimeException> exceptionSupplier) {
+        if (isNull(ttlSeconds) || ttlSeconds <= 0) throw exceptionSupplier.get();
+    }
 }
