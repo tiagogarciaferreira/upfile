@@ -2,8 +2,8 @@ package com.tgfcodes.upfile.presentation.file;
 
 import com.tgfcodes.upfile.application.output.DownloadLinkOutput;
 import com.tgfcodes.upfile.application.output.FileDownloadOutput;
+import com.tgfcodes.upfile.application.usecase.DownloadFileLinkUseCase;
 import com.tgfcodes.upfile.application.usecase.DownloadFileUseCase;
-import com.tgfcodes.upfile.application.usecase.DownloadLinkUseCase;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class FileDownloadController implements DownloadsApi {
 
     private final DownloadFileUseCase downloadFileUseCase;
 
-    private final DownloadLinkUseCase downloadLinkUseCase;
+    private final DownloadFileLinkUseCase downloadFileLinkUseCase;
 
     @Override
     @GetMapping("/{id}/download")
@@ -47,7 +47,7 @@ public class FileDownloadController implements DownloadsApi {
 
     @GetMapping("/{id}/link")
     public ResponseEntity<DownloadLinkResponse> link(@PathVariable UUID id) {
-        DownloadLinkOutput downloadLinkOutput = downloadLinkUseCase.execute(id);
+        DownloadLinkOutput downloadLinkOutput = downloadFileLinkUseCase.execute(id);
         DownloadLinkResponse downloadLinkResponse = DownloadLinkResponse.from(downloadLinkOutput);
         log.info("Download link generated successfully");
         return ResponseEntity.ok().body(downloadLinkResponse);

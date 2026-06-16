@@ -16,15 +16,15 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 @AppService
-public class DownloadLinkUseCase {
+public class DownloadFileLinkUseCase {
 
-    private static final Logger log = LoggerFactory.getLogger(DownloadLinkUseCase.class);
+    private static final Logger log = LoggerFactory.getLogger(DownloadFileLinkUseCase.class);
 
     private final StoredFiles storedFiles;
 
     private final Storage storage;
 
-    public DownloadLinkUseCase(final StoredFiles storedFiles, final Storage storage) {
+    public DownloadFileLinkUseCase(final StoredFiles storedFiles, final Storage storage) {
         this.storedFiles = storedFiles;
         this.storage = storage;
     }
