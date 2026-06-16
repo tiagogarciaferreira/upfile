@@ -1,4 +1,4 @@
-# 🐍 Snake Catalog API
+# 📁 File Storage API (S3-Compatible, MinIO)
 
 ## 📖 Sobre o projeto
 
@@ -9,6 +9,7 @@ API para **upload de arquivos**, permitindo:
 - Exclusão
 - Listagem com **paginação e filtros**
 - Download de arquivos
+- Links de download temporários
 
 ---
 
@@ -48,7 +49,6 @@ API para **upload de arquivos**, permitindo:
 | Step-CLI       | Gerar certificado autoassinado (usado nos scripts)                |
 | Cosign         | Assinar e verificar imagem Docker                                 |
 | jq             | Formatador JSON para saída do `verify-signature`                  |
-| K6             | Executar testes de carga                                          |
 | Postman        | Importar coleção de requisições                                   |
 | Gradle         | Executar builds localmente                                        |
 
@@ -101,7 +101,6 @@ API para **upload de arquivos**, permitindo:
 | GET    | /actuator/health           | Status geral de saúde da aplicação            |
 | GET    | /actuator/health/liveness  | Probe de liveness para Kubernetes/containers  |
 | GET    | /actuator/health/readiness | Probe de readiness para Kubernetes/containers |
-| GET    | /actuator/prometheus       | Métricas no formato Prometheus                |
 | GET    | /actuator/info             | Informações da aplicação (versão, nome, etc.) |
 
 ---
@@ -134,30 +133,11 @@ Todos os endpoints abaixo requerem autenticação via token JWT válido no heade
 
 ---
 
-### Executar setup e subir ambiente
-
-```bash
-  make setup-local
-  make compose-up
-```
-
----
-
-### 🌐 Acesso à API
-
-A API estará disponível em:
-
-- **Host:** api.upfile.tgfcodes.com
-- **Porta:** 8443
-- **URL completa:** https://api.upfile.tgfcodes.com:8443
-
----
-
-#### ⚙️ Configuração
+### ⚙️ Configuração
 
 Configurações via variáveis de ambiente no arquivo `.env`:
 
-# Environment Variables
+#### Environment Variables
 
 | Variável                              | Descrição                         | Exemplo              | Observações                           |
 |---------------------------------------|-----------------------------------|----------------------|---------------------------------------|
@@ -166,7 +146,7 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 | **API_VERSION**                       | Versão da API                     | `1.0`                | Útil para versionamento e headers     |
 | **SPRING_SERVLET_MULTIPART_LOCATION** | Diretório temporário para uploads | `/tmp/upload`        | Garantir espaço e permissões          |
 
-## Postgres
+### Postgres
 
 | Variável              | Descrição        | Exemplo       | Observações                     |
 |-----------------------|------------------|---------------|---------------------------------|
@@ -176,7 +156,7 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 | **POSTGRES_USER**     | Usuário do banco | `my-user`     | Privilégios mínimos necessários |
 | **POSTGRES_PASSWORD** | Senha do banco   | `my-password` | Nunca versionar                 |
 
-## SSL
+### SSL
 
 | Variável               | Descrição               | Exemplo                           | Observações                       |
 |------------------------|-------------------------|-----------------------------------|-----------------------------------|
@@ -184,7 +164,7 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 | **SSL_STORE_PASSWORD** | Senha do keystore       | `password`                        | Sensível                          |
 | **SSL_KEY_ALIAS**      | Alias da chave          | `tls-alias`                       | Deve existir no keystore          |
 
-## Spring
+### Spring
 
 | Variável                           | Descrição            | Exemplo                                | Observações                  |
 |------------------------------------|----------------------|----------------------------------------|------------------------------|
@@ -192,21 +172,21 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 | **SPRING_SQL_INIT_DATA_LOCATIONS** | Scripts SQL iniciais | `classpath:db/data/afterMigration.sql` | Executado após migrations    |
 | **SPRING_FLYWAY_LOCATIONS**        | Local das migrations | `classpath:db/migration`               | Versionamento do schema      |
 
-## Logs
+### Logs
 
 | Variável            | Descrição               | Exemplo                        | Observações                 |
 |---------------------|-------------------------|--------------------------------|-----------------------------|
 | **LOG_PATH**        | Diretório de logs       | `/logs`                        | Persistir fora do container |
 | **LOG_CONFIG_PATH** | Configuração do Logback | `classpath:logback-spring.xml` | Customização de appenders   |
 
-## Security
+### Security
 
 | Variável            | Descrição         | Exemplo                         | Observações          |
 |---------------------|-------------------|---------------------------------|----------------------|
 | **JWT_PUBLIC_KEY**  | Chave pública JWT | `classpath:jwt-public-key.jwk`  | Validação de tokens  |
 | **JWT_PRIVATE_KEY** | Chave privada JWT | `classpath:jwt-private-key.jwk` | Assinatura de tokens |
 
-## Users
+### Users
 
 | Variável                | Descrição                        | Exemplo      | Observações               |
 |-------------------------|----------------------------------|--------------|---------------------------|
@@ -215,7 +195,7 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 | **USER_WRITE**          | Usuário admin/escrita            | `user-admin` | Permissões elevadas       |
 | **USER_WRITE_PASSWORD** | Senha do usuário admin           | `password`   | Sensível                  |
 
-## MinIO (Object Storage)
+### MinIO (Object Storage)
 
 | Variável                     | Descrição                      | Exemplo                   | Observações                     |
 |------------------------------|--------------------------------|---------------------------|---------------------------------|
@@ -235,6 +215,25 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 
 ---
 
+### Executar setup e subir ambiente
+
+```bash
+  make setup-local
+  make compose-up
+```
+
+---
+
+### 🌐 Acesso à API
+
+API estará disponível em:
+
+- **Host:** api.upfile.tgfcodes.com
+- **Porta:** 8443
+- **URL completa:** https://api.upfile.tgfcodes.com:8443
+
+---
+
 ## 📬 Importar coleção do Postman
 
 1. Abra o Postman
@@ -247,7 +246,7 @@ Configurações via variáveis de ambiente no arquivo `.env`:
 4. No seletor de **environment**, escolha:  
    `API Upfile - Local`
 
-✅ Pronto. As requisições já estarão configuradas com.
+✅ Pronto. As requisições já estarão configuradas.
 
 ---
 
