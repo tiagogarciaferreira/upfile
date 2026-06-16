@@ -1,4 +1,4 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.input;
 
 import java.time.Instant;
 

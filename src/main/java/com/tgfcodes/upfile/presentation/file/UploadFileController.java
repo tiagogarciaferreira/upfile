@@ -1,7 +1,6 @@
 package com.tgfcodes.upfile.presentation.file;
 
-import com.tgfcodes.upfile.application.SearchFilesFilter;
-import com.tgfcodes.upfile.application.SearchFilesUseCase;
+import com.tgfcodes.upfile.application.input.SearchFilesFilter;
 import com.tgfcodes.upfile.application.input.UploadFileInput;
 import com.tgfcodes.upfile.application.output.FileDetailsOutput;
 import com.tgfcodes.upfile.application.output.UploadFileOutput;
@@ -9,6 +8,7 @@ import com.tgfcodes.upfile.application.query.FileMetadataOutput;
 import com.tgfcodes.upfile.application.query.PageResultOutput;
 import com.tgfcodes.upfile.application.usecase.DeleteFileUseCase;
 import com.tgfcodes.upfile.application.usecase.GetFileDetailsUseCase;
+import com.tgfcodes.upfile.application.usecase.SearchFilesUseCase;
 import com.tgfcodes.upfile.application.usecase.UploadFileUseCase;
 import com.tgfcodes.upfile.domain.exceptions.DomainValidationException;
 import jakarta.validation.Valid;

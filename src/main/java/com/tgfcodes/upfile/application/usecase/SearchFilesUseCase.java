@@ -1,6 +1,8 @@
-package com.tgfcodes.upfile.application;
+package com.tgfcodes.upfile.application.usecase;
 
 import com.tgfcodes.upfile.application.annotations.AppTransactional;
+import com.tgfcodes.upfile.application.input.SearchFilesFilter;
+import com.tgfcodes.upfile.application.input.SortOption;
 import com.tgfcodes.upfile.application.query.FileMetadataOutput;
 import com.tgfcodes.upfile.application.query.PageResultOutput;
 import com.tgfcodes.upfile.domain.Checks;
