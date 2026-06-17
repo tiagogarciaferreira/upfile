@@ -8,6 +8,7 @@ import org.jspecify.annotations.NullMarked;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,15 +27,15 @@ public class UploadResultMapper {
         return new UploadResult(
                 UUID.fromString(metadata.getOrDefault(FileMetadataName.ENTITY_ID.getValue(), "")),
                 request.bucket(),
-                metadata.getOrDefault(FileMetadataName.ORIGINAL_FILENAME.getValue(), ""),
-                request.key(),
+                metadata.getOrDefault(FileMetadataName.ORIGINAL_FILENAME.getValue(), "").toLowerCase(Locale.US),
+                request.key().toLowerCase(Locale.US),
                 eTag,
                 request.checksumXXHASH3(),
-                metadata.getOrDefault(FileMetadataName.FILE_EXTENSION.getValue(), ""),
-                request.contentType(),
-                request.contentDisposition(),
+                metadata.getOrDefault(FileMetadataName.FILE_EXTENSION.getValue(), "").toLowerCase(Locale.US),
+                request.contentType().toLowerCase(Locale.US),
+                request.contentDisposition().toLowerCase(Locale.US),
                 request.contentLength(),
-                metadata.getOrDefault(FileMetadataName.MEDIA_TYPE.getValue(), "")
+                metadata.getOrDefault(FileMetadataName.MEDIA_TYPE.getValue(), "").toLowerCase(Locale.US)
         );
     }
 }

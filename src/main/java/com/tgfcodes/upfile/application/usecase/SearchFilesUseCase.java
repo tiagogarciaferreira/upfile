@@ -51,7 +51,7 @@ public class SearchFilesUseCase {
         return new StoredFileFilter(
                 searchFilesFilter.fileName(),
                 searchFilesFilter.extension(),
-                searchFilesFilter.contentType(),
+                searchFilesFilter.type(),
                 searchFilesFilter.startDate(),
                 searchFilesFilter.endDate(),
                 page,
