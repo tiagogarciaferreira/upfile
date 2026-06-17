@@ -45,9 +45,6 @@ public class StoredFileEntity {
 
     private Long size;
 
-    @Column(name = "mime_type")
-    private String mimeType;
-
     private String type;
 
     @CreatedDate

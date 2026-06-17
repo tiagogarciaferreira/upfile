@@ -5,7 +5,6 @@ public enum FileMetadataName {
     ORIGINAL_FILENAME("originalFilename"),
     ENTITY_ID("entityId"),
     ENTITY_TYPE("entityType"),
-    MIME_TYPE("mimeType"),
     MEDIA_TYPE("mediaType"),
     FILE_EXTENSION("fileExtension"),
     UPLOADED_AT("uploadedAt"),

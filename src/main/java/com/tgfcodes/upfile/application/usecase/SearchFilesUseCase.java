@@ -26,24 +26,7 @@ public class SearchFilesUseCase {
     public PageResultOutput<FileMetadataOutput> execute(SearchFilesFilter searchFilesFilter) {
         Checks.requireNonNull(searchFilesFilter, () -> new DomainValidationException("Search files query cannot be null"));
 
-        StoredFileFilter.Page page = new StoredFileFilter.Page(searchFilesFilter.pageNumber(), searchFilesFilter.pageSize());
-        SortOption sortOption = SortOption.from(searchFilesFilter.sort());
-
-        StoredFileFilter.Sort sort = new StoredFileFilter.Sort(
-                sortOption.getField(),
-                sortOption.getDirection()
-        );
-
-        StoredFileFilter storedFileFilter = new StoredFileFilter(
-                searchFilesFilter.fileName(),
-                searchFilesFilter.extension(),
-                searchFilesFilter.type(),
-                searchFilesFilter.startDate(),
-                searchFilesFilter.endDate(),
-                page,
-                sort
-        );
-
+        StoredFileFilter storedFileFilter = buildStoredFileFilter(searchFilesFilter);
         PageResult<StoredFile> pageResult = storedFiles.search(storedFileFilter);
 
         return new PageResultOutput<>(
@@ -52,6 +35,27 @@ public class SearchFilesUseCase {
                 pageResult.size(),
                 pageResult.totalElements(),
                 pageResult.totalPages()
+        );
+    }
+
+    private StoredFileFilter buildStoredFileFilter(SearchFilesFilter searchFilesFilter) {
+
+        StoredFileFilter.Page page = new StoredFileFilter.Page(searchFilesFilter.pageNumber(), searchFilesFilter.pageSize());
+        SortOption sortOption = SortOption.from(searchFilesFilter.sort());
+
+        StoredFileFilter.Sort sort = new StoredFileFilter.Sort(
+                sortOption.getField(),
+                sortOption.getDirection()
+        );
+
+        return new StoredFileFilter(
+                searchFilesFilter.fileName(),
+                searchFilesFilter.extension(),
+                searchFilesFilter.contentType(),
+                searchFilesFilter.startDate(),
+                searchFilesFilter.endDate(),
+                page,
+                sort
         );
     }
 }

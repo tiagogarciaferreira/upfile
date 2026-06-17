@@ -18,7 +18,6 @@ public record FileDetailsOutput(
         String contentType,
         String contentDisposition,
         Long size,
-        String mimeType,
         String type,
         Instant createdAt
 ) {
@@ -43,7 +42,6 @@ public record FileDetailsOutput(
                 storedFile.contentType(),
                 storedFile.contentDisposition(),
                 storedFile.size(),
-                storedFile.mimeType(),
                 storedFile.type(),
                 storedFile.createdAt()
         );

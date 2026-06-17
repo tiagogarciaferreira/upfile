@@ -13,7 +13,6 @@ CREATE TABLE tb_stored_files
     content_type        VARCHAR(50)         NOT NULL,
     content_disposition VARCHAR(20)         NOT NULL,
     size                BIGINT              NOT NULL,
-    mime_type           VARCHAR(50)         NOT NULL,
     type                VARCHAR(20)         NOT NULL,
     created_at          TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by_user_id  UUID                NOT NULL,

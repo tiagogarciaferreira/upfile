@@ -17,7 +17,6 @@ public record StoredFile(
         String contentType,
         String contentDisposition,
         Long size,
-        String mimeType,
         String type,
         Instant createdAt
 ) {
@@ -33,7 +32,6 @@ public record StoredFile(
             String contentType,
             String contentDisposition,
             Long size,
-            String mimeType,
             String type
     ) {
         return new StoredFile(
@@ -47,7 +45,6 @@ public record StoredFile(
                 contentType,
                 contentDisposition,
                 size,
-                mimeType,
                 type,
                 Instant.now()
         );
@@ -64,7 +61,6 @@ public record StoredFile(
             String contentType,
             String contentDisposition,
             Long size,
-            String mimeType,
             String type,
             Instant createdAt
     ) {
@@ -79,7 +75,6 @@ public record StoredFile(
                 contentType,
                 contentDisposition,
                 size,
-                mimeType,
                 type,
                 createdAt
         );
@@ -96,7 +91,6 @@ public record StoredFile(
         Checks.requireNonEmpty(contentType, () -> new DomainValidationException("Content type cannot be empty"));
         Checks.requireNonEmpty(contentDisposition, () -> new DomainValidationException("Content disposition cannot be empty"));
         Checks.requireNonNull(size, () -> new DomainValidationException("Size cannot be null"));
-        Checks.requireNonEmpty(mimeType, () -> new DomainValidationException("MimeType cannot be empty"));
         Checks.requireNonEmpty(type, () -> new DomainValidationException("Type cannot be empty"));
         Checks.requireNonNull(createdAt, () -> new DomainValidationException("Created at cannot be null"));
     }

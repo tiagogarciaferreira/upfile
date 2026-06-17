@@ -34,7 +34,6 @@ public class UploadResultMapper {
                 request.contentType(),
                 request.contentDisposition(),
                 request.contentLength(),
-                metadata.getOrDefault(FileMetadataName.MIME_TYPE.getValue(), ""),
                 metadata.getOrDefault(FileMetadataName.MEDIA_TYPE.getValue(), "")
         );
     }

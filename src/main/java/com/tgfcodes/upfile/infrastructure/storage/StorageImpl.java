@@ -82,7 +82,7 @@ public class StorageImpl implements Storage {
             throw new FileTypeMismatchException("File extension does not match with mime type");
         }
 
-        Map<String, String> metadata = createMetadata(uploadInput, mimeType, type, extension);
+        Map<String, String> metadata = createMetadata(uploadInput, type, extension);
         String key = String.format("%s/%s/%s/%s.%s",
                 type,
                 StoredFile.class.getSimpleName().toLowerCase(),
@@ -254,12 +254,11 @@ public class StorageImpl implements Storage {
         }
     }
 
-    private Map<String, String> createMetadata(UploadInput uploadInput, String mimeType, String type, String extension) {
+    private Map<String, String> createMetadata(UploadInput uploadInput, String type, String extension) {
         return Map.of(
                 FileMetadataName.ORIGINAL_FILENAME.getValue(), uploadInput.fileName(),
                 FileMetadataName.ENTITY_ID.getValue(), UUID.randomUUID().toString(),
                 FileMetadataName.ENTITY_TYPE.getValue(), StoredFile.class.getSimpleName(),
-                FileMetadataName.MIME_TYPE.getValue(), mimeType,
                 FileMetadataName.MEDIA_TYPE.getValue(), type,
                 FileMetadataName.FILE_EXTENSION.getValue(), extension,
                 FileMetadataName.UPLOADED_AT.getValue(), Instant.now().toString(),

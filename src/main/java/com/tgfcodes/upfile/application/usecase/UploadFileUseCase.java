@@ -65,7 +65,6 @@ public class UploadFileUseCase {
                 storageResult.contentType(),
                 storageResult.contentDisposition(),
                 storageResult.size(),
-                storageResult.mimeType(),
                 storageResult.type()
         );
 

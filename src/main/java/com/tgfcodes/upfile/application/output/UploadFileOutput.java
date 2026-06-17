@@ -18,8 +18,6 @@ public record UploadFileOutput(
         String contentType,
         String contentDisposition,
         Long size,
-        String mimeType,
-        String type,
         Instant createdAt
 ) {
     public UploadFileOutput {
@@ -43,8 +41,6 @@ public record UploadFileOutput(
                 storedFile.contentType(),
                 storedFile.contentDisposition(),
                 storedFile.size(),
-                storedFile.mimeType(),
-                storedFile.type(),
                 storedFile.createdAt()
         );
     }
